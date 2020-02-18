@@ -25,7 +25,7 @@ namespace BrownianMotion {
             InitializeComponent();
         }
 
-        //private bool start = false, stop = false;
+        private bool start = false, stop = false;
         double T, eta, r0;
         private const double kB = 1.38E-23;
         int steps, d;
