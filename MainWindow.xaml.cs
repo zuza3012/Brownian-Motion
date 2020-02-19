@@ -25,7 +25,7 @@ namespace BrownianMotion {
             InitializeComponent();
         }
 
-        //private bool start = false, stop = false;
+        private bool start = false, stop = false;
         double T, eta, r0;
         private const double kB = 1.38E-23;
         int steps, d;
@@ -37,7 +37,6 @@ namespace BrownianMotion {
         protected override void OnClosed(EventArgs e) {
             base.OnClosed(e);
             Application.Current.Shutdown();
-            Console.WriteLine("Application has been closed");
         }
 
         private void SaveGraph_Click(object sender, RoutedEventArgs e) {
@@ -50,7 +49,7 @@ namespace BrownianMotion {
             r0 = double.Parse(radiusTb.Text) * Math.Pow(10, -6);
             steps = int.Parse(stepsTb.Text);
             d = int.Parse(dTb.Text);
-            Console.WriteLine("steps: " + steps);
+
 
             if (water0Rbtn.IsChecked == true) {
                 T = 273;
@@ -87,10 +86,6 @@ namespace BrownianMotion {
                 label.Content = "Air 0°C";
             }
 
-           // Console.WriteLine("r0: " + r0);
-          //  Console.WriteLine("eta: " + eta);
-            //Console.WriteLine("T: " + T);
-
             water0Rbtn.IsEnabled = false;
             water25Rbtn.IsEnabled = false;
             water100Rbtn.IsEnabled = false;
@@ -105,16 +100,11 @@ namespace BrownianMotion {
             Particle particle = new Particle();
             particle.D = kB * T / (3.14 * 6 * eta * r0);
             particle.d = d;
-            // Console.WriteLine("particle.D: " + particle.D);
 
             particle.MoveParticle(steps);
 
-            foreach(double item in particle.xLocations) {
-                Console.WriteLine(item);
-            }
+           
 
-            MakeGraph(particle);
-            //Console.WriteLine("ilosc serii: " + chart.Series.Count()); 
         }
 
         private void Stop_Click(object sender, RoutedEventArgs e) {
@@ -148,52 +138,6 @@ namespace BrownianMotion {
 
         }
 
-        private void MakeGraph(Particle p) {
-
-            xValues = new List<int>(p.xLocations);
-            yValues = new List<int>(p.yLocations);
-
-            for (int i = 0; i < p.xLocations.Count; i++) {
-                ListOfPoints.Add(new ObservablePoint {
-                    X = xValues[i],
-                    Y = yValues[i]
-                });
-            }
-
-            seriesCol = new SeriesCollection {
-                  new LineSeries{
-                     Values = ListOfPoints,
-                     LineSmoothness = 0,
-                     //PointGeometry = DefaultGeometries.Circle, // DefaultGeometries.Square tylko jak jest malo punktuf, inzcaej kupcia
-                     PointGeometrySize = 0,
-                     //Title = chartTitle,
-                     Fill = System.Windows.Media.Brushes.White,
-                   }
-                  
-             };
-
-            chart.AxisX.Add(
-            new Axis {
-                MinValue = p.xLocations.Min(),
-                MaxValue = p.xLocations.Max(),
-                Title = "x",
-            }) ;
-
-            
-            chart.AxisY.Add(
-            new Axis {
-                MinValue = p.yLocations.Min(),
-                MaxValue = p.yLocations.Max(),
-                Title = "y",
-
-            });
-            //chart.Background = System.Windows.Media.Brushes.White;
-            //chart.AxisX[0].Separator.StrokeThickness = 0;
-            //chart.AxisY[0].Separator.StrokeThickness = 0;
-           // chart.AxisY[0].Separator.IsEnabled = true;
-
-            chart.DataContext = this;
-            
-        }
+        
     }
 }

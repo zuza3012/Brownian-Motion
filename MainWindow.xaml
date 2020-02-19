@@ -47,25 +47,7 @@
         <DockPanel HorizontalAlignment="Right" Height="650"  Margin="10, 35" Width="820" VerticalAlignment="Top" >
             <Grid>
                 <Label x:Name="label" Content="Name of your liquid" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0" Width="157"/>
-                <Wpf:CartesianChart x:Name="chart"  Series="{Binding seriesCol}"
-                    LegendLocation="Bottom" Margin="10,50,20,30">
-                    <Wpf:CartesianChart.AxisY >
-                        <Wpf:Axis ShowLabels="False">
-                            <Wpf:Axis.Separator>
-                                <Wpf:Separator IsEnabled="False"></Wpf:Separator>
-                            </Wpf:Axis.Separator>
-                        </Wpf:Axis>
-                    </Wpf:CartesianChart.AxisY>
-
-                    <Wpf:CartesianChart.AxisX >
-                        <Wpf:Axis ShowLabels="False">
-                            <Wpf:Axis.Separator>
-                                <Wpf:Separator IsEnabled="False"></Wpf:Separator>
-                            </Wpf:Axis.Separator>
-                        </Wpf:Axis>
-                    </Wpf:CartesianChart.AxisX>
-
-                </Wpf:CartesianChart>
+                <Canvas x:Name="canvas" Margin="0,35,0,0"/>
                 <Slider x:Name="slider" HorizontalAlignment="Center"  VerticalAlignment="Top" Width="407" Maximum="100" SmallChange="1" TickFrequency="5" TickPlacement="BottomRight" Value="1" AutoToolTipPlacement="BottomRight" Cursor="IBeam" />
             </Grid>
         </DockPanel>
