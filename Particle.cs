@@ -17,35 +17,41 @@ namespace BrownianMotion {
         }
 
         
-        List<double[,]> listOfPoints = new List<double[,]>();
-        public List<double[,]> projected2dPoints = new List<double[,]>();
-        public void MakeARoom() {
+        //List<double[,]> listOfPoints = new List<double[,]>();
+        //public List<double[,]> projected2dPoints = new List<double[,]>();
+        public List<double[,]> MakeARoom(List<double[,]> pointsList) {
 
             double[,] projection = { {1,0,0},
                               {0,1,0}
         };
 
 
-            double[,] rotationZ = {{Math.Cos(angle), -Math.Sin(angle) ,0},
-                              {Math.Sin(angle), Math.Cos(angle), 0},
+            double[,] rotationZ = {{ System.Math.Cos(angle), -System.Math.Sin(angle) ,0},
+                              { System.Math.Sin(angle), System.Math.Cos(angle), 0},
                               {0, 0, 1}
         };
 
             double[,] rotationX = { {1,0,0},
-                              {0, Math.Cos(angle), -Math.Sin(angle)},
-                              {0, Math.Sin(angle), Math.Cos(angle)}
+                              {0, System.Math.Cos(angle), -System.Math.Sin(angle)},
+                              {0, System.Math.Sin(angle), System.Math.Cos(angle)}
         };
 
 
-            double[,] rotationY = { {Math.Cos(angle2), 0, -Math.Sin(angle2)},
+            double[,] rotationY = { { System.Math.Cos(angle2), 0, -System.Math.Sin(angle2)},
                               {0,1,0},
-                              {Math.Sin(angle2), 0, Math.Cos(angle2)}
+                              { System.Math.Sin(angle2), 0, System.Math.Cos(angle2)}
+        };
+/*
+            double[,] p01 = { {0},
+                         {220},
+                         {0}
         };
 
-            double[,] point = { {50},
-                         {-50},
-                         {-50}
+            double[,] p02 = { {0},
+                         {-220},
+                         {0}
         };
+
 
             double[,] point1 = { {220},
                          {-220},
@@ -92,14 +98,17 @@ namespace BrownianMotion {
             listOfPoints.Add(point6);
             listOfPoints.Add(point7);
             listOfPoints.Add(point8);
+            listOfPoints.Add(p01);
+            listOfPoints.Add(p02);*/
 
-            foreach(double [,] item in listOfPoints) {
+            List<double[,]> projected2dPoints = new List<double[,]>();
+            foreach (double [,] item in pointsList) {
                 double[,] rotated = MatrixMul(rotationY, item);
                 rotated = MatrixMul(rotationX, rotated);
                 double[,] projected2d = MatrixMul(projection, rotated);
                 projected2dPoints.Add(projected2d);
             }
-            
+            return projected2dPoints;
         }
 
         public double[,] MatrixMul(double[,] a, double[,] b) {

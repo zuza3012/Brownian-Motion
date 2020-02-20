@@ -15,7 +15,18 @@ namespace BrownianMotion {
     public partial class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
-            
+
+            listOfPoints.Add(point1);
+            listOfPoints.Add(point2);
+            listOfPoints.Add(point3);
+            listOfPoints.Add(point4);
+            listOfPoints.Add(point5);
+            listOfPoints.Add(point6);
+            listOfPoints.Add(point7);
+            listOfPoints.Add(point8);
+            listOfPoints.Add(p01);
+            listOfPoints.Add(p02);
+
             foreach (Shape control in canvas.Children)
             {
                 control.PreviewMouseLeftButtonDown += this.MouseLeftButtonDown;
@@ -34,7 +45,9 @@ namespace BrownianMotion {
         int d;
         Particle particle, room;
         double FirstXPos, FirstYPos, endXPos, endYPos, azimuth = 0, elevation = 0;
-       
+        List<double[,]> listOfCorners;
+
+
         bool captured = false;
         double x_shape, x_canvas, y_shape, y_canvas;
         UIElement source = null;
@@ -48,59 +61,60 @@ namespace BrownianMotion {
         private void MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             Mouse.Capture(null);
             captured = false;
+            Console.WriteLine(captured);
         }
 
         private void MouseMove(object sender, MouseEventArgs e) {
-
+            
             if (captured) {
                 double x = e.GetPosition(canvas).X;
                 double y = e.GetPosition(canvas).Y;
+
+                // B(x_shape, y_shape) PO1 = rooms.listOfCorners(8) 
+                Vector b = new Vector(x_shape - 0  ,y_shape - 220);
+                Vector b_2 = new Vector(x_shape - 0, y_shape + 220);
+
                 x_shape += x - x_canvas;
-                Canvas.SetLeft(source, x_shape);
-                x_canvas = x;
                 y_shape += y - y_canvas;
-                Canvas.SetTop(source, y_shape);
+
+                double lenB = b.Length;
+                double lenB_2 = b.Length;
+                double c = 0, d;
+
+                if (lenB <= lenB_2) {
+                    d = 220;
+                    // bierzemy wektor b
+                } else {
+                    d = -220;
+                    // robimy z b b_2
+                    b = b_2;
+                    lenB = lenB_2;
+                }
+                
+                // A(x_shape, y_shape) PO2 = room.listOfCorners(9)
+                Vector a = new Vector(x_shape - c, y_shape - d);
+                double lenA = a.Length;
+
+                room.angle2 = System.Math.Acos((a.X * b.X + a.Y * b.Y) / (lenA * lenB));
+                
+
+               // listOfCorners = room.MakeARoom();
+                Draw();
+                canvas.UpdateLayout();
+                Console.WriteLine("Angle2: " + room.angle2);
+                //Canvas.SetLeft(source, x_shape);
+                x_canvas = x;
+                
+                //Canvas.SetTop(source, y_shape);
                 y_canvas = y;
+                //canvas.Children.Clear();
+
             }
 
-            /*if (e.LeftButton == MouseButtonState.Pressed) {
-                canvas.Children.Clear();
-
-                // We start to moving objects with setting the lines positions.
-                endXPos = e.GetPosition(sender as Control).X;
-                endYPos = e.GetPosition(sender as Control).Y;
-
-                Console.WriteLine("Moved");
-                Console.WriteLine("end: " + "(" + endXPos + ", " + endYPos + ")");
-
-                room = new Particle();
-
-
-               
-                azimuth -= endXPos - FirstXPos;
-                elevation += endYPos - FirstYPos;
-
-                room.angle2 = azimuth * 2 * 3.14 / 360;
-                Console.WriteLine("angle2: " + room.angle2);
-
-               
-                
-                room.MakeARoom();
-                Draw();
-
-                FirstYPos = endXPos;
-                FirstYPos = endYPos;
-            }*/
+            
         }
        
         private void MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            /* //In this event, we get current mouse position on the control to use it in the MouseMove event.
-             FirstXPos = e.GetPosition(sender as Control).X;
-             FirstYPos = e.GetPosition(sender as Control).Y;
-
-             Console.WriteLine("first: " + "(" + FirstXPos + ", " + FirstYPos + ")");
-             Console.WriteLine("Left");*/
-
             source = (UIElement)sender;
             Mouse.Capture(source);
             captured = true;
@@ -108,8 +122,6 @@ namespace BrownianMotion {
             x_canvas = e.GetPosition(canvas).X;
             y_shape = Canvas.GetTop(source);
             y_canvas = e.GetPosition(canvas).Y;
-
-
         }
 
 
@@ -124,30 +136,18 @@ namespace BrownianMotion {
             room = new Particle();
             room.angle2 = slider.Value * 2 * 3.14 / 360;
 
-            room.MakeARoom();
+            //room.MakeARoom();
             Draw();
         }
 
-        
-
-        /*private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            pLeftButtonDown = e.GetPosition(canvas);
-            Console.WriteLine("(x,y) LeftcosTam: " + "(" + pLeftButtonDown.X + ", " + pLeftButtonDown.Y + ")");
-        }
-
-        private void Border_Drop(object sender, DragEventArgs e) {
-            pUp = e.GetPosition(canvas);
-            Console.WriteLine("(x,y) Up: " + "(" + pUp.X + ", " + pUp.Y + ")");
-        }*/
 
         private void SaveGraph_Click(object sender, RoutedEventArgs e) {
 
         }
 
         private void Start_Click(object sender, RoutedEventArgs e) {
-            r0 = double.Parse(radiusTb.Text) * Math.Pow(10, -6);
+            r0 = double.Parse(radiusTb.Text) * System.Math.Pow(10, -6);
             d = int.Parse(dTb.Text);
-
 
             if (water0Rbtn.IsChecked == true) {
                 T = 273;
@@ -195,15 +195,9 @@ namespace BrownianMotion {
             radiusTb.IsEnabled = false;
             angleTb.IsEnabled = false;
 
-
-
-
             /* particle = new Particle();
              particle.D = kB * T / (3.14 * 6 * eta * r0);
              particle.d = d;*/
-
-
-
 
         }
 

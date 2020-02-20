@@ -7,15 +7,17 @@
         xmlns:Wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
         Icon="molecules.ico"
-        Title="Brownian Motions" Height="724" Width="1024" ResizeMode="CanMinimize">
+        Title="Brownian Motions" Height="800" Width="1200" ResizeMode="CanMinimize">
     <Grid>
-        <Menu Height="25" Width="1024" VerticalAlignment="Top">
+        <Menu Height="25" Width="1200
+" VerticalAlignment="Top">
             <MenuItem  Header="File" Margin="2,0,0,0">
                 <MenuItem x:Name="saveItem" Header="Save Graph" IsEnabled="False" Click="SaveGraph_Click"></MenuItem>
             </MenuItem>
         </Menu>
 
-        <DockPanel HorizontalAlignment="Left" Height="650" LastChildFill="False" Margin="20, 35" Width="150" VerticalAlignment="Top" >
+        <DockPanel HorizontalAlignment="Left" Height="650" LastChildFill="False" Margin="20, 65
+                   " Width="150" VerticalAlignment="Top" >
             <Grid Height="650" VerticalAlignment="Top" Width="150" Margin="0,0,0,-0.4">
                 <Label Content="Radius (µm)" FontSize="12" Height="30" Margin="0,40,0,577" />
                 <TextBox x:Name="radiusTb" Margin="80,40,0,582" FontSize="12" Width="70" Height="25" />
@@ -44,13 +46,13 @@
             </Grid>
 
         </DockPanel>
-        <DockPanel HorizontalAlignment="Right" Height="650"  Margin="10, 35" Width="820" VerticalAlignment="Top" >
+        <DockPanel HorizontalAlignment="Right" Height="685"  Margin="0,30,25.6,0" Width="958" VerticalAlignment="Top" >
             <Grid>
                 <Label x:Name="label" Content="Name of your liquid" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0" Width="157"/>
                 <Border Margin="0,36,0,-0.4" >
                     <Canvas x:Name="canvas" Background="Transparent"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="0" Height="0"
           RenderTransform="1 0 0 -1 0 0"  RenderTransformOrigin="0.5,0.5"  >
-                        
+
                     </Canvas>
                 </Border>
                 <Slider x:Name="slider" HorizontalAlignment="Center"  VerticalAlignment="Top" Width="407" Maximum="359" SmallChange="1" TickPlacement="BottomRight" Value="1" AutoToolTipPlacement="BottomRight" Cursor="IBeam" ValueChanged="SetAngle_ValueChanged" Margin="208,0,205,0" />

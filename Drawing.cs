@@ -57,7 +57,7 @@ namespace BrownianMotion {
 
 
         private void Draw() {       // rysuje szescian
-            List<double[,]> listOfCorners = room.projected2dPoints;
+            listOfCorners = room.MakeARoom();
             foreach (double[,] item in listOfCorners) {
                 DrawPoint(item);
             }
