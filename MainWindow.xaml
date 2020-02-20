@@ -47,15 +47,31 @@
 
         </DockPanel>
         <DockPanel HorizontalAlignment="Right" Height="685"  Margin="0,30,25.6,0" Width="958" VerticalAlignment="Top" >
-            <Grid>
+            <Grid MouseWheel="Grid_MouseWheel" MouseUp="Grid_MouseUp" MouseDown="Grid_MouseDown" MouseMove="Grid_MouseMove">
                 <Label x:Name="label" Content="Name of your liquid" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0" Width="157"/>
-                <Border Margin="0,36,0,-0.4" >
+                <Viewport3D x:Name="viewPort">
+                    <Viewport3D.Camera>
+                        <PerspectiveCamera x:Name="camera" FarPlaneDistance="50" LookDirection="0,0,-10 " UpDirection=" 0,1,0" 
+                                           NearPlaneDistance="0" Position="0,0,5" FieldOfView="75"/> 
+                    </Viewport3D.Camera>
+
+                    <ModelVisual3D x:Name="model">
+                        <ModelVisual3D.Content>
+                            <Model3DGroup x:Name="group">
+                                <AmbientLight Color="#EFEEED" />
+                                <DirectionalLight Color="White" Direction="-5,-5,-7" />
+                            </Model3DGroup>
+                        </ModelVisual3D.Content>
+                    </ModelVisual3D>
+                </Viewport3D>
+                
+                <!---<Border Margin="0,36,0,-0.4" >
                     <Canvas x:Name="canvas" Background="Transparent"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="0" Height="0"
           RenderTransform="1 0 0 -1 0 0"  RenderTransformOrigin="0.5,0.5"  >
 
                     </Canvas>
-                </Border>
-                <Slider x:Name="slider" HorizontalAlignment="Center"  VerticalAlignment="Top" Width="407" Maximum="359" SmallChange="1" TickPlacement="BottomRight" Value="1" AutoToolTipPlacement="BottomRight" Cursor="IBeam" ValueChanged="SetAngle_ValueChanged" Margin="208,0,205,0" />
+                </Border>-->
+                <Button x:Name="resetBtn" Content="Reset camera" HorizontalAlignment="Center"  VerticalAlignment="Top" Width="87"  Height="20" Click="ResetButton_Click"/>
             </Grid>
         </DockPanel>
 

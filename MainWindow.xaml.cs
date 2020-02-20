@@ -13,134 +13,24 @@ namespace BrownianMotion {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
-        public MainWindow() {
-            InitializeComponent();
-
-            listOfPoints.Add(point1);
-            listOfPoints.Add(point2);
-            listOfPoints.Add(point3);
-            listOfPoints.Add(point4);
-            listOfPoints.Add(point5);
-            listOfPoints.Add(point6);
-            listOfPoints.Add(point7);
-            listOfPoints.Add(point8);
-            listOfPoints.Add(p01);
-            listOfPoints.Add(p02);
-
-            foreach (Shape control in canvas.Children)
-            {
-                control.PreviewMouseLeftButtonDown += this.MouseLeftButtonDown;
-                control.PreviewMouseLeftButtonUp += this.PreviewMouseLeftButtonUp;
-                control.Cursor = Cursors.Hand;
-            }
-
-            // Setting the MouseMove event for our parent control(In this case it is canvas).
-            canvas.PreviewMouseMove += this.MouseMove;
-            canvas.MouseLeftButtonUp += this.MouseLeftButtonUp;
-
-        }
-
+        
         double T, eta, r0;
         private const double kB = 1.38E-23;
         int d;
         Particle particle, room;
-        double FirstXPos, FirstYPos, endXPos, endYPos, azimuth = 0, elevation = 0;
-        List<double[,]> listOfCorners;
 
+        public MainWindow() {
+            InitializeComponent();
 
-        bool captured = false;
-        double x_shape, x_canvas, y_shape, y_canvas;
-        UIElement source = null;
-
-
-        void PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            //tego nie musi byc chyba
-            Console.WriteLine("Preview");
+            CreateObject();
         }
-
-        private void MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            Mouse.Capture(null);
-            captured = false;
-            Console.WriteLine(captured);
-        }
-
-        private void MouseMove(object sender, MouseEventArgs e) {
-            
-            if (captured) {
-                double x = e.GetPosition(canvas).X;
-                double y = e.GetPosition(canvas).Y;
-
-                // B(x_shape, y_shape) PO1 = rooms.listOfCorners(8) 
-                Vector b = new Vector(x_shape - 0  ,y_shape - 220);
-                Vector b_2 = new Vector(x_shape - 0, y_shape + 220);
-
-                x_shape += x - x_canvas;
-                y_shape += y - y_canvas;
-
-                double lenB = b.Length;
-                double lenB_2 = b.Length;
-                double c = 0, d;
-
-                if (lenB <= lenB_2) {
-                    d = 220;
-                    // bierzemy wektor b
-                } else {
-                    d = -220;
-                    // robimy z b b_2
-                    b = b_2;
-                    lenB = lenB_2;
-                }
-                
-                // A(x_shape, y_shape) PO2 = room.listOfCorners(9)
-                Vector a = new Vector(x_shape - c, y_shape - d);
-                double lenA = a.Length;
-
-                room.angle2 = System.Math.Acos((a.X * b.X + a.Y * b.Y) / (lenA * lenB));
-                
-
-               // listOfCorners = room.MakeARoom();
-                Draw();
-                canvas.UpdateLayout();
-                Console.WriteLine("Angle2: " + room.angle2);
-                //Canvas.SetLeft(source, x_shape);
-                x_canvas = x;
-                
-                //Canvas.SetTop(source, y_shape);
-                y_canvas = y;
-                //canvas.Children.Clear();
-
-            }
-
-            
-        }
-       
-        private void MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            source = (UIElement)sender;
-            Mouse.Capture(source);
-            captured = true;
-            x_shape = Canvas.GetLeft(source);
-            x_canvas = e.GetPosition(canvas).X;
-            y_shape = Canvas.GetTop(source);
-            y_canvas = e.GetPosition(canvas).Y;
-        }
-
 
         protected override void OnClosed(EventArgs e) {
             base.OnClosed(e);
             Application.Current.Shutdown();
         }
 
-        private void SetAngle_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
-            canvas.Children.Clear();
-            var slider = sender as Slider;
-            room = new Particle();
-            room.angle2 = slider.Value * 2 * 3.14 / 360;
-
-            //room.MakeARoom();
-            Draw();
-        }
-
-
+        
         private void SaveGraph_Click(object sender, RoutedEventArgs e) {
 
         }
