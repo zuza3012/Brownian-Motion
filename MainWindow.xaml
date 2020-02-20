@@ -20,8 +20,8 @@
                 <Label Content="Radius (µm)" FontSize="12" Height="30" Margin="0,40,0,577" />
                 <TextBox x:Name="radiusTb" Margin="80,40,0,582" FontSize="12" Width="70" Height="25" />
 
-                <Label Content="Steps" FontSize="12" Height="30" Margin="0,70,90,547" />
-                <TextBox x:Name="stepsTb"  Margin="80,70,0,547" FontSize="12" Width="70" Height="25" />
+                <Label Content="Angle (deg)" FontSize="12" Height="30" Margin="0,71,75,549" />
+                <TextBox x:Name="angleTb"  Margin="80,70,0,547" FontSize="12" Width="70" Height="25" />
 
                 <Label Content="d" FontSize="14" Height="30" Margin="5,100,90,520"/>
                 <TextBox x:Name="dTb"   Margin="80,100,0,517" FontSize="12" Width="70" Height="25"/>
@@ -47,8 +47,13 @@
         <DockPanel HorizontalAlignment="Right" Height="650"  Margin="10, 35" Width="820" VerticalAlignment="Top" >
             <Grid>
                 <Label x:Name="label" Content="Name of your liquid" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0" Width="157"/>
-                <Canvas x:Name="canvas" Margin="0,35,0,0"/>
-                <Slider x:Name="slider" HorizontalAlignment="Center"  VerticalAlignment="Top" Width="407" Maximum="100" SmallChange="1" TickFrequency="5" TickPlacement="BottomRight" Value="1" AutoToolTipPlacement="BottomRight" Cursor="IBeam" />
+                <Border Margin="0,36,0,-0.4" >
+                    <Canvas x:Name="canvas" Background="Transparent"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="0" Height="0"
+          RenderTransform="1 0 0 -1 0 0"  RenderTransformOrigin="0.5,0.5"  >
+                        
+                    </Canvas>
+                </Border>
+                <Slider x:Name="slider" HorizontalAlignment="Center"  VerticalAlignment="Top" Width="407" Maximum="359" SmallChange="1" TickPlacement="BottomRight" Value="1" AutoToolTipPlacement="BottomRight" Cursor="IBeam" ValueChanged="SetAngle_ValueChanged" Margin="208,0,205,0" />
             </Grid>
         </DockPanel>
 
