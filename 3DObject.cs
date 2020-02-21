@@ -92,13 +92,11 @@ namespace BrownianMotion {
 
             group.Children.Remove(mGeometry);
 
-            group.Children.Add(mGeometry);*/
-            
-            mGeometry = new GeometryModel3D(mesh, new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(252, 255, 252))));
-           mGeometry.Transform = new Transform3DGroup();
+    */
+            mGeometry = new GeometryModel3D(mesh, new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(161, 230, 0))));
+            mGeometry.Transform = new Transform3DGroup();
            group.Children.Add(mGeometry); // gropup z xaml'a
         }
-
         private void ResetButton_Click(object sender, RoutedEventArgs e) {
             camera.Position = new Point3D(camera.Position.X, camera.Position.Y, 5);     // resetujemy kamere i kladziemyna z=5 
                                                                                         //bo tyle bylo pocztkowo w xamlu

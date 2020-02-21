@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BrownianMotion"
-        xmlns:Wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        xmlns:HelixToolkit="clr-namespace:HelixToolkit.Wpf;assembly=HelixToolkit.Wpf"
         mc:Ignorable="d"
         Icon="molecules.ico"
         Title="Brownian Motions" Height="800" Width="1200" ResizeMode="CanMinimize">
@@ -49,7 +49,7 @@
         <DockPanel HorizontalAlignment="Right" Height="685"  Margin="0,30,25.6,0" Width="958" VerticalAlignment="Top" >
             <Grid MouseWheel="Grid_MouseWheel" MouseUp="Grid_MouseUp" MouseDown="Grid_MouseDown" MouseMove="Grid_MouseMove">
                 <Label x:Name="label" Content="Name of your liquid" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0" Width="157"/>
-                <Viewport3D x:Name="viewPort">
+                <Viewport3D x:Name="viewPort" >
                     <Viewport3D.Camera>
                         <PerspectiveCamera x:Name="camera" FarPlaneDistance="50" LookDirection="0,0,-10 " UpDirection=" 0,1,0" 
                                            NearPlaneDistance="0" Position="0,0,5" FieldOfView="75"/> 
