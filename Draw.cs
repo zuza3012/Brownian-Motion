@@ -44,6 +44,7 @@ namespace BrownianMotion {
                 particle.MoveParticle();
                 counter++;
 
+
             }
             if (drawWorker.CancellationPending) {
                 e.Cancel = true;

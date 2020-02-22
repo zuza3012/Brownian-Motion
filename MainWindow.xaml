@@ -9,17 +9,24 @@
         Icon="molecules.ico"
         Title="Brownian Motions" Height="659.6" Width="1006.8" ResizeMode="CanMinimize">
     <Grid>
-        <Menu Height="25" Width="1200" VerticalAlignment="Top">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="503*"/>
+            <ColumnDefinition Width="497*"/>
+        </Grid.ColumnDefinitions>
+        <Menu Height="25" Width="1200" VerticalAlignment="Top" Grid.ColumnSpan="2" Margin="0,0,-200,0">
             <MenuItem  Header="File" Margin="2,0,0,0">
                 <MenuItem x:Name="saveItem" Header="Save Graph" IsEnabled="False" Click="SaveGraph_Click"></MenuItem>
             </MenuItem>
         </Menu>
         <Button x:Name="btnStart" Content="Start" HorizontalAlignment="Left" Margin="33,43,0,0" VerticalAlignment="Top" Width="75" Click="Start_Click"/>
         <Button x:Name="btnStop" Content="Stop" HorizontalAlignment="Left" Margin="133,43,0,0" VerticalAlignment="Top" Width="75" Click="Stop_Click"/>
-        <Slider x:Name="slider" HorizontalAlignment="Left" Margin="265,43,0,0" VerticalAlignment="Top" Height="19" Width="244" TickPlacement="BottomRight" Maximum="60" SmallChange="15" Value="1" AutoToolTipPlacement="BottomRight" LargeChange="15" Minimum="14" TickFrequency="15"/>
-        <Canvas x:Name="canvas" Margin="0,83,-0.4,0.4" Width="0" Height="0"
+        <Slider x:Name="slider" HorizontalAlignment="Left" Margin="265,43,0,0" VerticalAlignment="Top" Height="19" Width="244" TickPlacement="BottomRight" Maximum="60" SmallChange="15" Value="1" AutoToolTipPlacement="BottomRight" LargeChange="15" Minimum="14" TickFrequency="15" Grid.ColumnSpan="2"/>
+        <StackPanel Margin="0,75,0,0" Grid.ColumnSpan="2">
+            <Canvas x:Name="canvas"  Width="0" Height="0"
           RenderTransform="1 0 0 -1 0 0"  RenderTransformOrigin="0.5,0.5" />
-        <TextBox x:Name="stepTb" HorizontalAlignment="Left" Height="23" Margin="552,39,0,0" TextWrapping="Wrap" Text="Write here particle's step" VerticalAlignment="Top" Width="145" />
+        </StackPanel>
+        
+        <TextBox x:Name="stepTb" HorizontalAlignment="Left" Height="23" Margin="49.1,39,0,0" TextWrapping="Wrap" Text="Write here particle's step" VerticalAlignment="Top" Width="145" Grid.Column="1" />
 
     </Grid>
 
