@@ -1,15 +1,14 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Numerics;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Drawing;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Media3D;
-using System.Windows.Shapes;
+using System.Windows.Media.Imaging;
+using Point = System.Windows.Point;
 
 namespace BrownianMotion {
     /// <summary>
@@ -22,8 +21,9 @@ namespace BrownianMotion {
         int steps;
         private BackgroundWorker drawWorker = null;
         List<Point> pixelToDraw = new List<Point>();
+        private List<Point> pixelOnCanvas = new List<Point>();
         public MainWindow() {
-            InitializeComponent(); 
+            InitializeComponent();
         }
 
         protected override void OnClosed(EventArgs e) {
@@ -31,47 +31,64 @@ namespace BrownianMotion {
             Application.Current.Shutdown();
         }
 
-        
-
         private void SaveGraph_Click(object sender, RoutedEventArgs e) {
+           
+
+
+           /* SaveFileDialog saveDialog = new SaveFileDialog();
+            saveDialog.Filter = "image files (*.png)|*.png|All files (*.*)|*.*";
+
+            saveDialog.Title = "Save an Image File";
+            saveDialog.ShowDialog();
+
+
+            if (saveDialog.FileName != "") {
+                System.IO.FileStream fs = (System.IO.FileStream)saveDialog.OpenFile();
+                
+                fs.Close();
+            }*/
 
         }
 
-        private void Start_Click(object sender, RoutedEventArgs e) {
-            stop = false;
-            canvas.Children.Clear();
-            particle = new Particle();
-            particle.d = int.Parse(stepTb.Text);
-            steps = Convert.ToInt32(slider.Value);
-            Console.WriteLine("steps: " + steps);
-              
-            if (null == drawWorker) {
-                drawWorker = new BackgroundWorker();
-                drawWorker.DoWork += new DoWorkEventHandler(drawWorker_DoWork);
-                drawWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(drawWorker_RunWorkerCompleted);
-                drawWorker.ProgressChanged += new ProgressChangedEventHandler(drawWorker_ProgressChanged);
-                drawWorker.WorkerReportsProgress = true;
-                drawWorker.WorkerSupportsCancellation = true;
-            }
-            if (!drawWorker.IsBusy) {
-                drawWorker.RunWorkerAsync();
-            }
-            
+    
 
-            btnStart.IsEnabled = false;
-            btnStop.IsEnabled = true;
+    private void Start_Click(object sender, RoutedEventArgs e) {
+        stop = false;
+        canvas.Children.Clear();
+        particle = new Particle(canvas.ActualWidth, canvas.ActualHeight);
+        //particle.d = int.Parse(stepTb.Text);
 
+
+        if (null == drawWorker) {
+            drawWorker = new BackgroundWorker();
+            drawWorker.DoWork += new DoWorkEventHandler(drawWorker_DoWork);
+            drawWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(drawWorker_RunWorkerCompleted);
+            drawWorker.ProgressChanged += new ProgressChangedEventHandler(drawWorker_ProgressChanged);
+            drawWorker.WorkerReportsProgress = true;
+            drawWorker.WorkerSupportsCancellation = true;
+        }
+        if (!drawWorker.IsBusy) {
+            drawWorker.RunWorkerAsync();
         }
 
-        private void Stop_Click(object sender, RoutedEventArgs e) {
-            drawWorker.CancelAsync();
 
-            btnStart.IsEnabled = true;
-            btnStop.IsEnabled = false;
-            
+        btnStart.IsEnabled = false;
+        btnStop.IsEnabled = true;
 
-        }
+    }
+
+    private void Stop_Click(object sender, RoutedEventArgs e) {
+        drawWorker.CancelAsync();
+        stop = true;
+        btnStart.IsEnabled = true;
+        btnStop.IsEnabled = false;
 
 
     }
+
+    private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+        steps = Convert.ToInt32(slider.Value) * 10;
+
+    }
+}
 }

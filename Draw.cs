@@ -18,51 +18,63 @@ namespace BrownianMotion {
             canvas.Children.Add(rec);
         }
 
-        /* private void Draw() {
-
-             int counter = 0;
-             for (int i = 0; i < 14; i++) {
-                 System.Console.WriteLine("w forze");
-                 System.Console.WriteLine("(" + particle.p.X + "," + particle.p.Y + ")");
-                 System.Console.WriteLine(counter);
-                 particle.MoveParticle();
-                 counter++;
-             }
-
-         }*/
-
         void drawWorker_DoWork(object sender, DoWorkEventArgs e) {
-            Thread.Sleep(1000);
+            double height = canvas.ActualHeight;
+            double width = canvas.ActualWidth;
+
             int counter = 0;
             pixelToDraw.Clear();
-            System.Console.WriteLine("ilosc elemnetuf: " + pixelToDraw.Count);
 
-            for (int i = 0; i < 1000; i++) {
-                pixelToDraw.Add(particle.p);
-                System.Console.WriteLine("(" + particle.p.X + "," + particle.p.Y + ")");
-                System.Console.WriteLine(counter);
-                particle.MoveParticle();
-                counter++;
+            if (!drawWorker.CancellationPending) {
 
+                for (int i = 0; i < steps ; i++) {
 
-            }
-            if (drawWorker.CancellationPending) {
+                    if (!pixelOnCanvas.Contains(particle.p)) {
+                        pixelToDraw.Add(particle.p);
+                        pixelOnCanvas.Add(particle.p);
+                    }
+
+                    System.Console.WriteLine("(" + particle.p.X + "," + particle.p.Y + ")");
+                    System.Console.WriteLine(counter);
+                    particle.MoveParticle();
+
+                    if (particle.p.X >= width) {
+                        particle.p.X = particle.p.X - width;
+                    } else {
+                        particle.p.X = particle.p.X + width;
+                    }
+
+                    if (particle.p.Y >= height) {
+                        particle.p.Y = particle.p.Y - height;
+                    } else {
+                        particle.p.Y = particle.p.Y + height;
+                    }
+                    counter++;
+                }
+                
+            } else {
                 e.Cancel = true;
                 return;
             }
+           
 
             drawWorker.ReportProgress(100);
         }
 
         void drawWorker_ProgressChanged(object sender, ProgressChangedEventArgs e) {
-            
         }
 
         void drawWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
             foreach (Point p in pixelToDraw) {
                 AddPixel(p.X, p.Y);
             }
-
+            pixelToDraw.Clear();
+            //System.Console.WriteLine("sleep: "+ time);
+            Thread.Sleep(10);
+            if (stop) {
+                drawWorker.CancelAsync();
+                return;
+            }
             drawWorker.RunWorkerAsync(); // This will make the BgWorker run again, and never runs before it is completed.
 
         }

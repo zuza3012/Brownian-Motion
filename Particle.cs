@@ -7,10 +7,10 @@ namespace BrownianMotion {
         public Point p;
         int u1, u2;
         Random rand = new Random();
-        public Particle() {
-            p.X = 0;
-            p.Y = 0;
-            d = 0;
+        public Particle(double width, double height) {
+            p.X = width / 2;
+            p.Y = height / 2;
+            d = 1;
         }
         public void MoveParticle() {
             u1 = rand.Next(0, 100);
@@ -21,6 +21,7 @@ namespace BrownianMotion {
                 double tmp;
                 tmp = p.X + d;
                 p.X = tmp;
+
             } else {
                 double tmp;
                 tmp = p.X - d;

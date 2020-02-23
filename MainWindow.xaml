@@ -13,20 +13,28 @@
             <ColumnDefinition Width="503*"/>
             <ColumnDefinition Width="497*"/>
         </Grid.ColumnDefinitions>
-        <Menu Height="25" Width="1200" VerticalAlignment="Top" Grid.ColumnSpan="2" Margin="0,0,-200,0">
+        <Menu Height="25" VerticalAlignment="Top" Grid.ColumnSpan="2">
             <MenuItem  Header="File" Margin="2,0,0,0">
-                <MenuItem x:Name="saveItem" Header="Save Graph" IsEnabled="False" Click="SaveGraph_Click"></MenuItem>
+                <MenuItem x:Name="saveItem" Header="Save Graph" IsEnabled="True" Click="SaveGraph_Click"></MenuItem>
             </MenuItem>
         </Menu>
         <Button x:Name="btnStart" Content="Start" HorizontalAlignment="Left" Margin="33,43,0,0" VerticalAlignment="Top" Width="75" Click="Start_Click"/>
         <Button x:Name="btnStop" Content="Stop" HorizontalAlignment="Left" Margin="133,43,0,0" VerticalAlignment="Top" Width="75" Click="Stop_Click"/>
-        <Slider x:Name="slider" HorizontalAlignment="Left" Margin="265,43,0,0" VerticalAlignment="Top" Height="19" Width="244" TickPlacement="BottomRight" Maximum="60" SmallChange="15" Value="1" AutoToolTipPlacement="BottomRight" LargeChange="15" Minimum="14" TickFrequency="15" Grid.ColumnSpan="2"/>
+        <Slider x:Name="slider" HorizontalAlignment="Left" Margin="265,43,0,0" VerticalAlignment="Top" Height="19" Width="244" TickPlacement="BottomRight" Maximum="100" SmallChange="1" AutoToolTipPlacement="BottomRight" LargeChange="10" Grid.ColumnSpan="2" ValueChanged="Slider_ValueChanged" Background="{x:Null}" Minimum="1"/>
         <StackPanel Margin="0,75,0,0" Grid.ColumnSpan="2">
-            <Canvas x:Name="canvas"  Width="0" Height="0"
-          RenderTransform="1 0 0 -1 0 0"  RenderTransformOrigin="0.5,0.5" />
+            <Canvas x:Name="canvas" Height="553" Background="White"  />
+
+            <!--<Border Height="553" Width="1003">
+                <Canvas  x:Name="canvas" HorizontalAlignment="Center" VerticalAlignment="Center"
+          Width="0" Height="0"
+          RenderTransform="1 0 0 -1 0 0">
+                    
+                </Canvas>
+            </Border>-->
+
+            <!-- Width="0" Height="0"
+          RenderTransform="1 0 0 -1 0 0"  RenderTransformOrigin="0.5,0.5" -->
         </StackPanel>
-        
-        <TextBox x:Name="stepTb" HorizontalAlignment="Left" Height="23" Margin="49.1,39,0,0" TextWrapping="Wrap" Text="Write here particle's step" VerticalAlignment="Top" Width="145" Grid.Column="1" />
 
     </Grid>
 
