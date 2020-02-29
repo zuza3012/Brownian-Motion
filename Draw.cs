@@ -16,6 +16,7 @@ namespace BrownianMotion {
             rec.Height = 1;
             rec.Fill = new SolidColorBrush(Colors.Black);
             canvas.Children.Add(rec);
+
         }
 
         void drawWorker_DoWork(object sender, DoWorkEventArgs e) {
