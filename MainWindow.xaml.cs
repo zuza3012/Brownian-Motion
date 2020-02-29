@@ -32,22 +32,6 @@ namespace BrownianMotion {
         }
 
         private void SaveGraph_Click(object sender, RoutedEventArgs e) {
-           
-
-
-           /* SaveFileDialog saveDialog = new SaveFileDialog();
-            saveDialog.Filter = "image files (*.png)|*.png|All files (*.*)|*.*";
-
-            saveDialog.Title = "Save an Image File";
-            saveDialog.ShowDialog();
-
-
-            if (saveDialog.FileName != "") {
-                System.IO.FileStream fs = (System.IO.FileStream)saveDialog.OpenFile();
-                
-                fs.Close();
-            }*/
-
         }
 
     
@@ -56,7 +40,6 @@ namespace BrownianMotion {
         stop = false;
         canvas.Children.Clear();
         particle = new Particle(canvas.ActualWidth, canvas.ActualHeight);
-        //particle.d = int.Parse(stepTb.Text);
 
 
         if (null == drawWorker) {
@@ -87,7 +70,7 @@ namespace BrownianMotion {
     }
 
     private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
-        steps = Convert.ToInt32(slider.Value) * 10;
+        steps = Convert.ToInt32(slider.Value) * 5;
 
     }
 }

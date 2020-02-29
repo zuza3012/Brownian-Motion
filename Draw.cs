@@ -19,10 +19,10 @@ namespace BrownianMotion {
         }
 
         void drawWorker_DoWork(object sender, DoWorkEventArgs e) {
+            Thread.Sleep(10);
             double height = canvas.ActualHeight;
             double width = canvas.ActualWidth;
 
-            int counter = 0;
             pixelToDraw.Clear();
 
             if (!drawWorker.CancellationPending) {
@@ -33,23 +33,7 @@ namespace BrownianMotion {
                         pixelToDraw.Add(particle.p);
                         pixelOnCanvas.Add(particle.p);
                     }
-
-                    System.Console.WriteLine("(" + particle.p.X + "," + particle.p.Y + ")");
-                    System.Console.WriteLine(counter);
-                    particle.MoveParticle();
-
-                    if (particle.p.X >= width) {
-                        particle.p.X = particle.p.X - width;
-                    } else {
-                        particle.p.X = particle.p.X + width;
-                    }
-
-                    if (particle.p.Y >= height) {
-                        particle.p.Y = particle.p.Y - height;
-                    } else {
-                        particle.p.Y = particle.p.Y + height;
-                    }
-                    counter++;
+                    particle.MoveParticle(width, height);
                 }
                 
             } else {
@@ -69,13 +53,13 @@ namespace BrownianMotion {
                 AddPixel(p.X, p.Y);
             }
             pixelToDraw.Clear();
-            //System.Console.WriteLine("sleep: "+ time);
+
             Thread.Sleep(10);
             if (stop) {
                 drawWorker.CancelAsync();
                 return;
             }
-            drawWorker.RunWorkerAsync(); // This will make the BgWorker run again, and never runs before it is completed.
+            drawWorker.RunWorkerAsync(); 
 
         }
 

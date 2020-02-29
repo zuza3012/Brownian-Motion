@@ -12,7 +12,7 @@ namespace BrownianMotion {
             p.Y = height / 2;
             d = 1;
         }
-        public void MoveParticle() {
+        public void MoveParticle(double width, double height) {
             u1 = rand.Next(0, 100);
 
             u2 = rand.Next(0, 100);
@@ -38,6 +38,20 @@ namespace BrownianMotion {
                 p.Y = tmp;
             }
 
+            if (p.X >= width) {
+                p.X = p.X - width;
+            } else if (p.X < 0) {
+                p.X = p.X + width;
+            } else {
+            }
+
+
+            if (p.Y >= height) {
+                p.Y = p.Y - height;
+            } else if (p.Y < 0) {
+                p.Y = p.Y + height;
+            } else {
+            }
 
         }
 
