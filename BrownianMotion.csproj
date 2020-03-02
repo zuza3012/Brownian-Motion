@@ -73,6 +73,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="3D.cs" />
     <Compile Include="Draw.cs" />
     <Compile Include="Particle.cs" />
     <Compile Include="MainWindow.xaml.cs">

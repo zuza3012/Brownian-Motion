@@ -21,10 +21,10 @@
         <Button x:Name="btnStart" Content="Start" HorizontalAlignment="Left" Margin="33,43,0,0" VerticalAlignment="Top" Width="75" Click="Start_Click"/>
         <Button x:Name="btnStop" Content="Stop" HorizontalAlignment="Left" Margin="133,43,0,0" VerticalAlignment="Top" Width="75" Click="Stop_Click"/>
         <Slider x:Name="slider" HorizontalAlignment="Left" Margin="265,43,0,0" VerticalAlignment="Top" Height="19" Width="244" TickPlacement="BottomRight" Maximum="100" SmallChange="1" AutoToolTipPlacement="BottomRight" LargeChange="10" Grid.ColumnSpan="2" ValueChanged="Slider_ValueChanged" Background="{x:Null}" Minimum="1"/>
-        <RadioButton x:Name="r2" Content="2D" Grid.Column="1" HorizontalAlignment="Left" Margin="83.8,43,0,0" VerticalAlignment="Top"/>
+        <RadioButton x:Name="r2" Content="2D" Grid.Column="1" HorizontalAlignment="Left" Margin="83.8,43,0,0" VerticalAlignment="Top" IsChecked="True"/>
         <RadioButton x:Name="r3" Content="3D" Grid.Column="1" HorizontalAlignment="Left" Margin="144.8,43,0,0" VerticalAlignment="Top"/>
             <StackPanel Margin="0,75,0,0" Grid.ColumnSpan="2">
-            <Canvas x:Name="canvas" Height="553" Background="White"  />
+            <Canvas x:Name="canvas" Height="553" Background="White" PreviewMouseDown="Canvas_PreviewMouseDown" PreviewMouseMove="Canvas_PreviewMouseMove" PreviewMouseUp="Canvas_PreviewMouseUp"  />
 
             <!--<Border Height="553" Width="1003">
                 <Canvas  x:Name="canvas" HorizontalAlignment="Center" VerticalAlignment="Center"

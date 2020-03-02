@@ -3,6 +3,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 
 namespace BrownianMotion {
@@ -34,7 +35,7 @@ namespace BrownianMotion {
                         pixelToDraw.Add(particle.p);
                         pixelOnCanvas.Add(particle.p);
                     }
-                    particle.MoveParticle(width, height);
+                    particle.MoveParticle(width, height, false);
                 }
                 
             } else {
@@ -50,7 +51,7 @@ namespace BrownianMotion {
         }
 
         void drawWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
-            foreach (Point p in pixelToDraw) {
+            foreach (Point3D p in pixelToDraw) {
                 AddPixel(p.X, p.Y);
             }
             pixelToDraw.Clear();
