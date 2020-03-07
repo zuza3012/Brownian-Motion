@@ -18,14 +18,13 @@ namespace BrownianMotion {
                 p.X = 0;
                 p.Y = 0;
                 p.Z = 0;
-                d = 1;
+                d = 10;
             }
             
             
         }
-        public void MoveParticle(double width, double height, bool want3D) {
+        public void MoveParticle(double width, double height, bool want3D, int a) {
             u1 = rand.Next(0, 100);
-
             u2 = rand.Next(0, 100);
 
             if (u1 >= 50) {

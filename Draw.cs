@@ -29,20 +29,34 @@ namespace BrownianMotion {
 
             if (!drawWorker.CancellationPending) {
 
-                for (int i = 0; i < steps ; i++) {
+                if (radio2 == true) {
+                    for (int i = 0; i < steps; i++) {
 
-                    if (!pixelOnCanvas.Contains(particle.p)) {
-                        pixelToDraw.Add(particle.p);
-                        pixelOnCanvas.Add(particle.p);
+                        if (!pixelOnCanvas.Contains(particle.p)) {
+                            pixelToDraw.Add(particle.p);
+                            pixelOnCanvas.Add(particle.p);
+                        }
+                        particle.MoveParticle(width, height, false, a);
+
                     }
-                    particle.MoveParticle(width, height, false);
+                } else if (radio3 == true) {
+                    tmpX = particle.p.X;
+                    tmpY = particle.p.Y;
+                    tmpZ = particle.p.Z;
+
+                    System.Console.WriteLine("poprezdni: " + "(" + tmpX + "," + tmpY + "," + tmpZ + ")");
+                    particle.MoveParticle(width, height, true, a);
+                    System.Console.WriteLine("obecny: " + "(" + particle.p.X + "," + particle.p.Y + "," + particle.p.Z + ")");
+
                 }
-                
+
+
+
             } else {
                 e.Cancel = true;
                 return;
             }
-           
+
 
             drawWorker.ReportProgress(100);
         }
@@ -51,17 +65,26 @@ namespace BrownianMotion {
         }
 
         void drawWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
-            foreach (Point3D p in pixelToDraw) {
-                AddPixel(p.X, p.Y);
+
+            if (radio2 == true) {
+                foreach (Point3D p in pixelToDraw) {
+                    AddPixel(p.X, p.Y);
+                }
+                pixelToDraw.Clear();
+            } else {
+
+                DrawCube(a, zoom);
+
             }
-            pixelToDraw.Clear();
+
+
 
             Thread.Sleep(10);
             if (stop) {
                 drawWorker.CancelAsync();
                 return;
             }
-            drawWorker.RunWorkerAsync(); 
+            drawWorker.RunWorkerAsync();
 
         }
 
