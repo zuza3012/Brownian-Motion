@@ -18,15 +18,15 @@ namespace BrownianMotion {
     public partial class MainWindow : Window {
 
         Particle particle;
-        bool stop = true;
-        int steps, a = 300;
+        bool stop = true, captured = false;
+        int steps, a = 200;
         private BackgroundWorker drawWorker = null;
         List<Point3D> pixelToDraw = new List<Point3D>();
         private List<Point3D> pixelOnCanvas = new List<Point3D>();
-        double mx, my, azimuth = 0, elevation = 0;
+        double mx, my, azimuth = 0, elevation = 0, zoom = 1;
         private List<Point3D> edges3D = new List<Point3D>();
-        private List<Point> edges2D = new List<Point>();
-
+        private Point[] edges2D;
+        //double zoom -> w mouseWheel czy w czymś zmieniaj to np od 0.5 do 2 -> przemnożyć przez to x i y
          
         public MainWindow() {
             InitializeComponent();
@@ -41,37 +41,59 @@ namespace BrownianMotion {
         private void SaveGraph_Click(object sender, RoutedEventArgs e) {
         }
 
+        private void Canvas_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e) {
+            
+            if (r2.IsChecked == true || stop == true)
+                return;
+
+            if(e.Delta > 0) {
+                zoom += 0.05;
+            }else if(e.Delta < 0 && Math.Abs(zoom) > 0) {
+                zoom -= 0.05;
+                
+            } else {
+                zoom = 1;
+            }
+            Console.WriteLine("Delta: " + e.Delta);
+            Console.WriteLine("zoom: " + zoom);
+
+            DrawCube(a, zoom);
+        }
+
         private void Canvas_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
             if (r2.IsChecked == true || stop == true)
                 return;
-            Console.WriteLine("down");
             mx = e.GetPosition(canvas).X;
             my = e.GetPosition(canvas).Y;
-
+            captured = true;
         }
+
 
         private void Canvas_PreviewMouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
             if (r2.IsChecked == true || stop == true)
                 return;
-            Console.WriteLine("move");
-            double new_mx = e.GetPosition(canvas).X;
-            double new_my = e.GetPosition(canvas).Y;
 
-            azimuth -= new_mx - mx;
-            elevation += new_my - my;
+            if (captured) {
+                double new_mx = e.GetPosition(canvas).X;
+                double new_my = e.GetPosition(canvas).Y;
 
-            mx = new_mx;
-            my = new_my;
+                azimuth -= new_mx - mx;
+                elevation += new_my - my;
 
-            canvas.Children.Clear();
-            DrawCube(a);
+                mx = new_mx;
+                my = new_my;
+
+                DrawCube(a, zoom);
+            }
         }
 
         private void Canvas_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
             if (r2.IsChecked == true || stop == true)
                 return;
-            Console.WriteLine("up");
+            captured = false;
         }
+
+        
 
         private void Start_Click(object sender, RoutedEventArgs e) {
 
@@ -97,15 +119,11 @@ namespace BrownianMotion {
                 btnStart.IsEnabled = false;
                 btnStop.IsEnabled = true;
             } else {
-                
-                TransformGroup group = new TransformGroup();
-                group.Children.Add(new TranslateTransform(canvas.ActualWidth / 2, canvas.ActualHeight / 2));
-                group.Children.Add(new ScaleTransform(1, 1));
-                group.Children.Add(new RotateTransform(0));
-                canvas.RenderTransform = group;
+                stop = false;
+               
 
-                DrawCube(a);
-                DrawCircle();
+                DrawCube(a, zoom);
+                
 
             }
     }
@@ -117,7 +135,7 @@ namespace BrownianMotion {
                 btnStart.IsEnabled = true;
                 btnStop.IsEnabled = false;
             } else {
-                
+                stop = true;
             }
 
 

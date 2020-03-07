@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -12,7 +8,7 @@ using System.Windows.Shapes;
 namespace BrownianMotion {
     public partial class MainWindow : Window {
 
-       
+
         private void DrawPoint(double[,] point) {
 
             Ellipse ellipse = new Ellipse {
@@ -28,19 +24,24 @@ namespace BrownianMotion {
             canvas.Children.Add(ellipse);
         }
 
-        private void DrawCube(int a) {
+        private void DrawCube(int a, double zoom) {
+            double offX = canvas.ActualWidth / 2, offY = canvas.ActualHeight / 2;
+            canvas.Children.Clear();
+
+            edges2D = new Point[8];
             double theta = Math.PI * azimuth / 180.0;
             double phi = Math.PI * elevation / 180.0;
             float cosT = (float)Math.Cos(theta), sinT = (float)Math.Sin(theta), cosP = (float)Math.Cos(phi),
                     sinP = (float)Math.Sin(phi);
             float cosTcosP = cosT * cosP, cosTsinP = cosT * sinP, sinTcosP = sinT * cosP, sinTsinP = sinT * sinP;
 
+            edges3D.Clear();
 
             Point3D p1 = new Point3D(a, a, a);
             Point3D p2 = new Point3D(-a, a, a);
             Point3D p3 = new Point3D(-a, -a, a);
             Point3D p4 = new Point3D(a, -a, a);
-           
+
             Point3D p5 = new Point3D(a, a, -a);
             Point3D p6 = new Point3D(-a, a, -a);
             Point3D p7 = new Point3D(-a, -a, -a);
@@ -55,18 +56,20 @@ namespace BrownianMotion {
             edges3D.Add(p7);
             edges3D.Add(p8);
 
-            foreach(Point3D point in edges3D) {
+            int i = 0;
+            foreach (Point3D point in edges3D) {
                 double x = cosT * point.X + sinT * point.Z;
                 double y = sinTsinP * point.X - cosP * point.Y - cosTsinP * point.Z;
                 double z = cosTcosP * point.Z - sinTcosP * point.X - sinP * point.Y;
 
-                x *= 500 / (z + 2 * 500);
-                y *= 500 / (z + 2 * 500);
+                x *= zoom * canvas.ActualHeight / (z + 2 * canvas.ActualHeight);
+                y *= zoom * canvas.ActualHeight / (z + 2 * canvas.ActualHeight);
 
-                edges2D.Add(new Point(x, y));
-                
+                edges2D[i] = new Point(x + offX, y + offY);
+               // Console.WriteLine(x + ", " + y);
+                i++;
             }
-            
+
             DrawLine(edges2D[0], edges2D[1]);
             DrawLine(edges2D[1], edges2D[2]);
             DrawLine(edges2D[2], edges2D[3]);
@@ -82,7 +85,7 @@ namespace BrownianMotion {
             DrawLine(edges2D[2], edges2D[6]);
             DrawLine(edges2D[3], edges2D[7]);
 
-
+            return;
         }
 
         private void DrawLine(Point point1, Point point2) {
@@ -106,7 +109,7 @@ namespace BrownianMotion {
                 Stroke = Brushes.Blue,
                 StrokeThickness = 2
             };
-        
+
             Canvas.SetLeft(ellipse, posX);
             Canvas.SetTop(ellipse, posY);
             canvas.Children.Add(ellipse);
