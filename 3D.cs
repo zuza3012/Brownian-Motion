@@ -8,33 +8,85 @@ using System.Windows.Shapes;
 namespace BrownianMotion {
     public partial class MainWindow : Window {
 
+        public void TransformTo2D() {
+            offX = canvas.ActualWidth / 2;
+            offY = canvas.ActualHeight / 2;
+            
 
-        private void DrawPoint(double[,] point) {
+            theta = Math.PI * azimuth / 180.0;
+            phi = Math.PI * elevation / 180.0;
+            cosT = (float)Math.Cos(theta);
+            sinT = (float)Math.Sin(theta);
+            cosP = (float)Math.Cos(phi);
+            sinP = (float)Math.Sin(phi);
+            cosTcosP = cosT * cosP;
+            cosTsinP = cosT * sinP;
+            sinTcosP = sinT * cosP;
+            sinTsinP = sinT * sinP;
+        }
+
+        private void DrawPoint(Point3D point) {
+            TransformTo2D();
+            //canvas.Children.Clear();
+            Console.WriteLine("rysuje" + "(" + point.X + "," + point.Y + "," + point.Z + ")");
+            Point3D p = new Point3D();
+            p.X = point.X;
+            p.Y = point.Y;
+            p.Z = point.Z;
+
+            Console.WriteLine();
+            if (point.X > ((double)a - 20 * zoom) || point.X < ((double)(-a) + 20 * zoom)|| point.Y > ((double)a - 20 * zoom) || point.Y < ((double)(-a) + 20 * zoom) || point.Z > ((double)a -20 * zoom)|| point.Z <((double)(-a) + 20 * zoom)) {
+                Console.WriteLine("jestem tuuu");
+                particle.p.X = tmpX;
+                particle.p.Y = tmpY;
+                particle.p.Z = tmpZ;
+                p.X = tmpX;
+                p.Y = tmpY;
+                p.Z = tmpZ;
+
+                Console.WriteLine();
+                Console.WriteLine("spr");
+                Console.WriteLine("(" + p.X + "," + p.Y + "," + p.Z + ")");
+            }
+            double x = cosT * p.X + sinT * p.Z;
+            double y = sinTsinP * p.X - cosP * p.Y - cosTsinP * p.Z;
+            double z = cosTcosP * p.Z - sinTcosP * p.X - sinP * p.Y;
+          
+            x *= zoom * canvas.ActualHeight / (z + 2 * canvas.ActualHeight);
+            y *= zoom * canvas.ActualHeight / (z + 2 * canvas.ActualHeight);
+         
+
+         
 
             Ellipse ellipse = new Ellipse {
-                Width = 10,
-                Height = 10,
-                Stroke = Brushes.Black,
+                Width = 20 * zoom,
+                Height = 20 * zoom,
+                Stroke = Brushes.Aqua,
                 StrokeThickness = 2,
-                Fill = Brushes.Black
+                //Fill = Brushes.Black
             };
 
-            Canvas.SetLeft(ellipse, (point[0, 0] - 5));
-            Canvas.SetTop(ellipse, (point[1, 0] - 5));
+            Canvas.SetLeft(ellipse, (x + offX -10));
+            Canvas.SetTop(ellipse, (y + offY -10));
             canvas.Children.Add(ellipse);
         }
 
         private void DrawCube(int a, double zoom) {
-            double offX = canvas.ActualWidth / 2, offY = canvas.ActualHeight / 2;
+            /* double offX = canvas.ActualWidth / 2, offY = canvas.ActualHeight / 2;
+             canvas.Children.Clear();
+
+             edges2D = new Point[8];
+             double theta = Math.PI * azimuth / 180.0;
+             double phi = Math.PI * elevation / 180.0;
+             float cosT = (float)Math.Cos(theta), sinT = (float)Math.Sin(theta), cosP = (float)Math.Cos(phi),
+                     sinP = (float)Math.Sin(phi);
+             float cosTcosP = cosT * cosP, cosTsinP = cosT * sinP, sinTcosP = sinT * cosP, sinTsinP = sinT * sinP;*/
+
+            TransformTo2D();
+
             canvas.Children.Clear();
 
             edges2D = new Point[8];
-            double theta = Math.PI * azimuth / 180.0;
-            double phi = Math.PI * elevation / 180.0;
-            float cosT = (float)Math.Cos(theta), sinT = (float)Math.Sin(theta), cosP = (float)Math.Cos(phi),
-                    sinP = (float)Math.Sin(phi);
-            float cosTcosP = cosT * cosP, cosTsinP = cosT * sinP, sinTcosP = sinT * cosP, sinTsinP = sinT * sinP;
-
             edges3D.Clear();
 
             Point3D p1 = new Point3D(a, a, a);
@@ -66,7 +118,7 @@ namespace BrownianMotion {
                 y *= zoom * canvas.ActualHeight / (z + 2 * canvas.ActualHeight);
 
                 edges2D[i] = new Point(x + offX, y + offY);
-               // Console.WriteLine(x + ", " + y);
+                // Console.WriteLine(x + ", " + y);
                 i++;
             }
 
@@ -84,6 +136,8 @@ namespace BrownianMotion {
             DrawLine(edges2D[1], edges2D[5]);
             DrawLine(edges2D[2], edges2D[6]);
             DrawLine(edges2D[3], edges2D[7]);
+            Console.WriteLine("to chce rysowac: " + "(" + particle.p.X + "," + particle.p.Y + "," + particle.p.Z + ")");
+            DrawPoint(particle.p);
 
             return;
         }
@@ -100,20 +154,6 @@ namespace BrownianMotion {
             canvas.Children.Add(line);
         }
 
-
-        private void DrawCircle() {
-            double posX = 100, posY = 100;
-            Ellipse ellipse = new Ellipse {
-                Width = 10,
-                Height = 10,
-                Stroke = Brushes.Blue,
-                StrokeThickness = 2
-            };
-
-            Canvas.SetLeft(ellipse, posX);
-            Canvas.SetTop(ellipse, posY);
-            canvas.Children.Add(ellipse);
-        }
         private double[,] MatrixMul(double[,] a, double[,] b) {
             int colsA = a.GetLength(1);
             int rowsA = a.GetLength(0);
