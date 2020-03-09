@@ -105,6 +105,7 @@ namespace BrownianMotion {
                 radio3 = true;
                 
                 
+
                 particle = new Particle(canvas.ActualWidth, canvas.ActualHeight, true);
                 DrawCube(a, zoom);
             }
