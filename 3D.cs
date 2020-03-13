@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -54,8 +55,8 @@ namespace BrownianMotion {
           
             x *= zoom * canvas.ActualHeight / (z + 2 * canvas.ActualHeight);
             y *= zoom * canvas.ActualHeight / (z + 2 * canvas.ActualHeight);
-         
-
+            
+            pointsOnLine.Add(new Point(x + offX, y + offY));
          
 
             Ellipse ellipse = new Ellipse {
@@ -69,19 +70,13 @@ namespace BrownianMotion {
             Canvas.SetLeft(ellipse, (x + offX -10));
             Canvas.SetTop(ellipse, (y + offY -10));
             canvas.Children.Add(ellipse);
+           
+           DrawPath(pointsOnLine);
+            
+           
         }
 
         private void DrawCube(int a, double zoom) {
-            /* double offX = canvas.ActualWidth / 2, offY = canvas.ActualHeight / 2;
-             canvas.Children.Clear();
-
-             edges2D = new Point[8];
-             double theta = Math.PI * azimuth / 180.0;
-             double phi = Math.PI * elevation / 180.0;
-             float cosT = (float)Math.Cos(theta), sinT = (float)Math.Sin(theta), cosP = (float)Math.Cos(phi),
-                     sinP = (float)Math.Sin(phi);
-             float cosTcosP = cosT * cosP, cosTsinP = cosT * sinP, sinTcosP = sinT * cosP, sinTsinP = sinT * sinP;*/
-
             TransformTo2D();
 
             canvas.Children.Clear();
@@ -139,6 +134,8 @@ namespace BrownianMotion {
             Console.WriteLine("to chce rysowac: " + "(" + particle.p.X + "," + particle.p.Y + "," + particle.p.Z + ")");
             DrawPoint(particle.p);
 
+            
+
             return;
         }
 
@@ -152,6 +149,13 @@ namespace BrownianMotion {
                 Y2 = point2.Y
             };
             canvas.Children.Add(line);
+        }
+
+        private void DrawPath(List<Point> list) {
+            for(int i = 1; i < list.Count; i++) {
+                DrawLine(list[2*i], list[2*i+1]);
+                //grrrrr
+            }
         }
 
         private double[,] MatrixMul(double[,] a, double[,] b) {

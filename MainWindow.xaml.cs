@@ -19,6 +19,7 @@ namespace BrownianMotion {
         private List<Point3D> pixelOnCanvas = new List<Point3D>();
         double mx, my, azimuth = 0, elevation = 0, offX = 0, offY = 0, theta = 0, phi = 0, tmpX = 0, tmpY = 0, tmpZ = 0, zoom = 1;
         private List<Point3D> edges3D = new List<Point3D>();
+        private List<Point> pointsOnLine = new List<Point>();
         private Point[] edges2D;
         //double zoom -> w mouseWheel czy w czymś zmieniaj to np od 0.5 do 2 -> przemnożyć przez to x i y
         float cosT = 0, sinT = 0, cosP = 0, sinP = 0, cosTcosP = 0, sinTsinP = 0, sinTcosP = 0, cosTsinP = 0;
@@ -137,9 +138,6 @@ namespace BrownianMotion {
             btnStop.IsEnabled = false;
 
             stop = true;
-
-
-
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
