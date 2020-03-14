@@ -9,10 +9,9 @@ using System.Windows.Shapes;
 namespace BrownianMotion {
     public partial class MainWindow : Window {
 
-        public void TransformTo2D() {
+        private void ParametersToTransform() {
             offX = canvas.ActualWidth / 2;
             offY = canvas.ActualHeight / 2;
-            
 
             theta = Math.PI * azimuth / 180.0;
             phi = Math.PI * elevation / 180.0;
@@ -26,10 +25,19 @@ namespace BrownianMotion {
             sinTsinP = sinT * sinP;
         }
 
+        private Point3D Transform2D(Point3D point) {
+            double x = cosT * point.X + sinT * point.Z;
+            double y = sinTsinP * point.X - cosP * point.Y - cosTsinP * point.Z;
+            double z = cosTcosP * point.Z - sinTcosP * point.X - sinP * point.Y;
+
+            
+            
+            return new Point3D(x, y, z);
+        }
         private void DrawPoint(Point3D point) {
-            TransformTo2D();
+            //ParametersToTransform();
             //canvas.Children.Clear();
-            Console.WriteLine("rysuje" + "(" + point.X + "," + point.Y + "," + point.Z + ")");
+           
             Point3D p = new Point3D();
             p.X = point.X;
             p.Y = point.Y;
@@ -37,27 +45,27 @@ namespace BrownianMotion {
 
             Console.WriteLine();
             if (point.X > ((double)a - 20 * zoom) || point.X < ((double)(-a) + 20 * zoom)|| point.Y > ((double)a - 20 * zoom) || point.Y < ((double)(-a) + 20 * zoom) || point.Z > ((double)a -20 * zoom)|| point.Z <((double)(-a) + 20 * zoom)) {
-                Console.WriteLine("jestem tuuu");
                 particle.p.X = tmpX;
                 particle.p.Y = tmpY;
                 particle.p.Z = tmpZ;
                 p.X = tmpX;
                 p.Y = tmpY;
                 p.Z = tmpZ;
-
-                Console.WriteLine();
-                Console.WriteLine("spr");
-                Console.WriteLine("(" + p.X + "," + p.Y + "," + p.Z + ")");
             }
-            double x = cosT * p.X + sinT * p.Z;
-            double y = sinTsinP * p.X - cosP * p.Y - cosTsinP * p.Z;
-            double z = cosTcosP * p.Z - sinTcosP * p.X - sinP * p.Y;
-          
-            x *= zoom * canvas.ActualHeight / (z + 2 * canvas.ActualHeight);
-            y *= zoom * canvas.ActualHeight / (z + 2 * canvas.ActualHeight);
             
-            pointsOnLine.Add(new Point(x + offX, y + offY));
-         
+            Point3D transformedPoint = Transform2D(point);
+
+            polygonPoints3D.Add(transformedPoint);
+
+            transformedPoint.X *= zoom * canvas.ActualHeight / (transformedPoint.Z + 2 * canvas.ActualHeight);
+            transformedPoint.Y *= zoom * canvas.ActualHeight / (transformedPoint.Z + 2 * canvas.ActualHeight);
+
+            polygonPoints.Add(new Point(transformedPoint.X + offX, transformedPoint.Y + offY));
+            
+            
+
+            Console.WriteLine("count polygonPoints3D: " + polygonPoints3D.Count);
+            Console.WriteLine("count polygonPoints: " + polygonPoints.Count);
 
             Ellipse ellipse = new Ellipse {
                 Width = 20 * zoom,
@@ -67,18 +75,36 @@ namespace BrownianMotion {
                 //Fill = Brushes.Black
             };
 
-            Canvas.SetLeft(ellipse, (x + offX -10));
-            Canvas.SetTop(ellipse, (y + offY -10));
+            Canvas.SetLeft(ellipse, (transformedPoint.X + offX -10));
+            Canvas.SetTop(ellipse, (transformedPoint.Y + offY -10));
             canvas.Children.Add(ellipse);
-           
-           DrawPath(pointsOnLine);
+
             
-           
+            
         }
 
+        private void TransformPolygon(Point3DCollection polygon3D, PointCollection polygon2D) {
+            // change the elemnets in polygonsPoints3D to zoom
+            //polygonPoints.Clear();
+            for (int i = 0; i < polygon3D.Count; i++) {
+                Console.WriteLine("polygon before" + "(" + polygon3D[i].X + "," + polygon3D[i].Y + "," + polygon3D[i].Z + ")");
+                Point3D new_point = Transform2D(polygon3D[i]);
+                polygon3D[i] = new_point;
+                Console.WriteLine("polygon after" + "(" + polygon3D[i].X + "," + polygon3D[i].Y + "," + polygon3D[i].Z + ")");
+                new_point.X *= zoom * canvas.ActualHeight / (new_point.Z + 2 * canvas.ActualHeight);
+                new_point.Y *= zoom * canvas.ActualHeight / (new_point.Z + 2 * canvas.ActualHeight);
+                polygonPoints[i] = new Point(new_point.X + offX, new_point.Y + offY);
+            }
+            
+           
+           /* for (int i = 0; i < polygonPoints3D.Count; i++) {
+                Point3D tmp = Transform2D(polygonPoints3D[i]);
+                polygonPoints3D[i] = tmp;
+                polygonPoints[i] = new Point(polygonPoints3D[i].X + offX, polygonPoints3D[i].Y + offY);
+            }*/
+        }
         private void DrawCube(int a, double zoom) {
-            TransformTo2D();
-
+            ParametersToTransform();
             canvas.Children.Clear();
 
             edges2D = new Point[8];
@@ -105,15 +131,10 @@ namespace BrownianMotion {
 
             int i = 0;
             foreach (Point3D point in edges3D) {
-                double x = cosT * point.X + sinT * point.Z;
-                double y = sinTsinP * point.X - cosP * point.Y - cosTsinP * point.Z;
-                double z = cosTcosP * point.Z - sinTcosP * point.X - sinP * point.Y;
-
-                x *= zoom * canvas.ActualHeight / (z + 2 * canvas.ActualHeight);
-                y *= zoom * canvas.ActualHeight / (z + 2 * canvas.ActualHeight);
-
-                edges2D[i] = new Point(x + offX, y + offY);
-                // Console.WriteLine(x + ", " + y);
+                Point3D p = Transform2D(point);
+                p.X *= zoom * canvas.ActualHeight / (p.Z + 2 * canvas.ActualHeight);
+                p.Y *= zoom * canvas.ActualHeight / (p.Z + 2 * canvas.ActualHeight);
+                edges2D[i] = new Point(p.X + offX, p.Y + offY);
                 i++;
             }
 
@@ -131,12 +152,12 @@ namespace BrownianMotion {
             DrawLine(edges2D[1], edges2D[5]);
             DrawLine(edges2D[2], edges2D[6]);
             DrawLine(edges2D[3], edges2D[7]);
-            Console.WriteLine("to chce rysowac: " + "(" + particle.p.X + "," + particle.p.Y + "," + particle.p.Z + ")");
-            DrawPoint(particle.p);
-
             
+            DrawPoint(particle.p);
+            //TransformPolygon(polygonPoints3D, polygonPoints);
+            CreateAPolyline();
 
-            return;
+
         }
 
         private void DrawLine(Point point1, Point point2) {
@@ -151,11 +172,17 @@ namespace BrownianMotion {
             canvas.Children.Add(line);
         }
 
-        private void DrawPath(List<Point> list) {
-            for(int i = 1; i < list.Count; i++) {
-                DrawLine(list[2*i], list[2*i+1]);
-                //grrrrr
-            }
+
+        private void CreateAPolyline() {
+            SolidColorBrush brush = new SolidColorBrush();
+            brush.Color = Colors.Blue;
+            
+            Polyline yellowPolyline = new Polyline();
+            yellowPolyline.Stroke = brush;
+            yellowPolyline.StrokeThickness = 1;
+            yellowPolyline.Points = polygonPoints;
+            
+            canvas.Children.Add(yellowPolyline);
         }
 
         private double[,] MatrixMul(double[,] a, double[,] b) {
@@ -180,7 +207,6 @@ namespace BrownianMotion {
                     result[i, j] = sum;
                 }
             }
-
             return result;
         }
 
@@ -197,8 +223,6 @@ namespace BrownianMotion {
                 }
                 Console.WriteLine();
             }
-
-
         }
     }
 }

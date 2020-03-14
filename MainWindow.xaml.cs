@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using Point = System.Windows.Point;
 
@@ -20,6 +21,8 @@ namespace BrownianMotion {
         double mx, my, azimuth = 0, elevation = 0, offX = 0, offY = 0, theta = 0, phi = 0, tmpX = 0, tmpY = 0, tmpZ = 0, zoom = 1;
         private List<Point3D> edges3D = new List<Point3D>();
         private List<Point> pointsOnLine = new List<Point>();
+        private PointCollection polygonPoints = new PointCollection();
+        private Point3DCollection polygonPoints3D = new Point3DCollection();
         private Point[] edges2D;
         //double zoom -> w mouseWheel czy w czymś zmieniaj to np od 0.5 do 2 -> przemnożyć przez to x i y
         float cosT = 0, sinT = 0, cosP = 0, sinP = 0, cosTcosP = 0, sinTsinP = 0, sinTcosP = 0, cosTsinP = 0;
@@ -95,17 +98,18 @@ namespace BrownianMotion {
         private void Start_Click(object sender, RoutedEventArgs e) {
             stop = false;
             canvas.Children.Clear();
+            polygonPoints3D.Clear();
+            polygonPoints.Clear();
+
             stop = false;
 
             if (r2.IsChecked == true) {
                 radio3 = false;
-                radio2 = true;           
+                radio2 = true;
                 particle = new Particle(canvas.ActualWidth, canvas.ActualHeight, false);
             } else {
                 radio2 = false;
                 radio3 = true;
-                
-                
 
                 particle = new Particle(canvas.ActualWidth, canvas.ActualHeight, true);
                 DrawCube(a, zoom);

@@ -17,7 +17,6 @@ namespace BrownianMotion {
             rec.Height = 1;
             rec.Fill = new SolidColorBrush(Colors.Black);
             canvas.Children.Add(rec);
-
         }
 
         void drawWorker_DoWork(object sender, DoWorkEventArgs e) {
@@ -44,20 +43,13 @@ namespace BrownianMotion {
                     tmpY = particle.p.Y;
                     tmpZ = particle.p.Z;
 
-                    System.Console.WriteLine("poprezdni: " + "(" + tmpX + "," + tmpY + "," + tmpZ + ")");
                     particle.MoveParticle(width, height, true, a);
-                    System.Console.WriteLine("obecny: " + "(" + particle.p.X + "," + particle.p.Y + "," + particle.p.Z + ")");
-
                 }
-
-
 
             } else {
                 e.Cancel = true;
                 return;
             }
-
-
             drawWorker.ReportProgress(100);
         }
 
@@ -72,12 +64,8 @@ namespace BrownianMotion {
                 }
                 pixelToDraw.Clear();
             } else {
-
                 DrawCube(a, zoom);
-
             }
-
-
 
             Thread.Sleep(10);
             if (stop) {
@@ -85,9 +73,7 @@ namespace BrownianMotion {
                 return;
             }
             drawWorker.RunWorkerAsync();
-
         }
-
 
     }
 }
