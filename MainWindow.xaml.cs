@@ -53,8 +53,6 @@ namespace BrownianMotion {
             } else {
                 zoom = 1;
             }
-            Console.WriteLine("Delta: " + e.Delta);
-            Console.WriteLine("zoom: " + zoom);
 
             DrawCube(a, zoom);
         }
