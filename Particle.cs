@@ -18,7 +18,7 @@ namespace BrownianMotion {
                 p.X = 0;
                 p.Y = 0;
                 p.Z = 0;
-                d = 10;
+                d = 20;
             }
             
             
