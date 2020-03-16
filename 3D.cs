@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -59,14 +60,12 @@ namespace BrownianMotion {
 
             for (int j = 0; j < polygonPoints3D.Count; j++) {
                 Point3D tmp = Transform2D(polygonPoints3D[j]);
-                Console.WriteLine("linia 3d: " + (tmp.X + offX) + ", " + (tmp.Y + offY));
+                //Debug.WriteLine("linia 3d: " + (tmp.X + offX) + ", " + (tmp.Y + offY));
+                polygonPoints[j] = new Point(tmp.X + offX, tmp.Y + offY);
                 polygonPoints[j] = new Point(tmp.X + offX , tmp.Y + offY );
-                Console.WriteLine("linia 2d: " + polygonPoints[j].X + ", " + polygonPoints[j].Y);
+                //Debug.WriteLine("linia 2d: " + polygonPoints[j].X + ", " + polygonPoints[j].Y);
 
             }
-
-            
-
 
             Ellipse ellipse = new Ellipse {
                 Width = 20 * zoom,

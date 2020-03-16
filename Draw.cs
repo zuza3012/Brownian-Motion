@@ -67,7 +67,7 @@ namespace BrownianMotion {
                 DrawCube(a, zoom);
             }
 
-            Thread.Sleep(10);
+            //Thread.Sleep(10);
             if (stop) {
                 drawWorker.CancelAsync();
                 return;

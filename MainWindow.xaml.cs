@@ -54,13 +54,12 @@ namespace BrownianMotion {
                 zoom = 1;
             }
 
-            DrawCube(a, zoom);
+           // DrawCube(a, zoom);
         }
 
         private void Canvas_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
             if (r2.IsChecked == true || stop == true)
                 return;
-            Console.WriteLine("down!");
             mx = e.GetPosition(canvas).X;
             my = e.GetPosition(canvas).Y;
             captured = true;
@@ -81,7 +80,7 @@ namespace BrownianMotion {
                 mx = new_mx;
                 my = new_my;
 
-                DrawCube(a, zoom);
+                //DrawCube(a, zoom);
             }
         }
 
