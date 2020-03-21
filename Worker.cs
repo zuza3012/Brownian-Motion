@@ -32,7 +32,7 @@ namespace BrownianMotion {
             if (radio2 == true) {
                 max = 90000;
             }
-            var s2 = Stopwatch.StartNew();
+            //var s2 = Stopwatch.StartNew();
             for (int nCounter = 1; nCounter <= max; ++nCounter) {
                 if (drawWorker.CancellationPending) {
                     e.Cancel = true;
@@ -61,8 +61,8 @@ namespace BrownianMotion {
 
                 drawWorker.ReportProgress((int)System.Math.Floor(nCounter * 100.0 / (double)max));
             }
-            s2.Stop();
-            System.Console.WriteLine(s2.Elapsed.TotalMilliseconds.ToString("0.000 ms"));
+            //s2.Stop();
+            //System.Console.WriteLine(s2.Elapsed.TotalMilliseconds.ToString("0.000 ms"));
 
         }
 
@@ -78,13 +78,13 @@ namespace BrownianMotion {
 
             if (radio2 == true) {
                 using (writeableBmp.GetBitmapContext()) {
-                    var s3 = Stopwatch.StartNew();
+                    //var s3 = Stopwatch.StartNew();
                     foreach (Point3D point in hashset_points) {
                         writeableBmp.SetPixel((int)point.X, (int)point.Y, Colors.Black);
                     }
                     hashset_points.Clear();
-                    s3.Stop();
-                    System.Console.WriteLine(s3.Elapsed.TotalMilliseconds.ToString("0.000 ms"));
+                    //s3.Stop();
+                    //System.Console.WriteLine(s3.Elapsed.TotalMilliseconds.ToString("0.000 ms"));
                 }
 
                 Image image = new Image();
