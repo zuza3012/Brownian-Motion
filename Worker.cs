@@ -25,7 +25,6 @@ namespace BrownianMotion {
         void drawWorker_DoWork(object sender, DoWorkEventArgs e) {
             double height = canvas.ActualHeight;
             double width = canvas.ActualWidth;
-
             int max = 500;
 
             hashset_points = new HashSet<Point3D>();
