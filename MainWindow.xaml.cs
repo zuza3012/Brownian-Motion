@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using Point = System.Windows.Point;
 
@@ -13,23 +14,20 @@ namespace BrownianMotion {
     public partial class MainWindow : Window {
 
         Particle particle;
-        bool stop = true, captured = false, radio2 = false, radio3 = false;
-        int steps, a = 200;
+        bool captured = false, radio2 = false, radio3 = false;
+        int a = 200;
         private BackgroundWorker drawWorker = null;
-        List<Point3D> pixelToDraw = new List<Point3D>();
-        private List<Point3D> pixelOnCanvas = new List<Point3D>();
         double mx, my, azimuth = 0, elevation = 0, offX = 0, offY = 0, theta = 0, phi = 0, tmpX = 0, tmpY = 0, tmpZ = 0, zoom = 1;
         private List<Point3D> edges3D = new List<Point3D>();
-        private List<Point> pointsOnLine = new List<Point>();
         private PointCollection polygonPoints = new PointCollection();
         private Point3DCollection polygonPoints3D = new Point3DCollection();
         private Point[] edges2D;
-        //double zoom -> w mouseWheel czy w czymś zmieniaj to np od 0.5 do 2 -> przemnożyć przez to x i y
         float cosT = 0, sinT = 0, cosP = 0, sinP = 0, cosTcosP = 0, sinTsinP = 0, sinTcosP = 0, cosTsinP = 0;
+        WriteableBitmap writeableBmp;
+        HashSet<Point3D> hashset_points;
 
         public MainWindow() {
             InitializeComponent();
-
         }
 
         protected override void OnClosed(EventArgs e) {
@@ -42,23 +40,21 @@ namespace BrownianMotion {
 
         private void Canvas_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e) {
 
-            if (r2.IsChecked == true || stop == true)
+            if (r2.IsChecked == true)
                 return;
 
-            if (e.Delta > 0) {
+            if (e.Delta > 0 && zoom < 1.6) {
                 zoom += 0.05;
-            } else if (e.Delta < 0 && Math.Abs(zoom) > 0) {
+            } else if (e.Delta < 0 && Math.Abs(zoom) > 0 && zoom > 0.5) {
                 zoom -= 0.05;
 
-            } else {
-                zoom = 1;
             }
 
-           // DrawCube(a, zoom);
+            DrawCube(a, zoom, false);
         }
 
         private void Canvas_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
-            if (r2.IsChecked == true || stop == true)
+            if (r2.IsChecked == true)
                 return;
             mx = e.GetPosition(canvas).X;
             my = e.GetPosition(canvas).Y;
@@ -67,7 +63,7 @@ namespace BrownianMotion {
 
 
         private void Canvas_PreviewMouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
-            if (r2.IsChecked == true || stop == true)
+            if (r2.IsChecked == true)
                 return;
 
             if (captured) {
@@ -80,12 +76,12 @@ namespace BrownianMotion {
                 mx = new_mx;
                 my = new_my;
 
-                //DrawCube(a, zoom);
+                DrawCube(a, zoom, false);
             }
         }
 
         private void Canvas_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
-            if (r2.IsChecked == true || stop == true)
+            if (r2.IsChecked == true)
                 return;
             captured = false;
         }
@@ -93,14 +89,16 @@ namespace BrownianMotion {
 
 
         private void Start_Click(object sender, RoutedEventArgs e) {
-            stop = false;
-            canvas.Children.Clear();
-            polygonPoints3D.Clear();
-            polygonPoints.Clear();
+            btnStart.IsEnabled = false;
+            btnStop.IsEnabled = true;
 
-            stop = false;
+            canvas.Children.Clear();
+            pgBar.Value = 0;
 
             if (r2.IsChecked == true) {
+                writeableBmp = BitmapFactory.New(1010, 600);
+                writeableBmp.Clear(Colors.White);
+
                 radio3 = false;
                 radio2 = true;
                 particle = new Particle(canvas.ActualWidth, canvas.ActualHeight, false);
@@ -108,8 +106,12 @@ namespace BrownianMotion {
                 radio2 = false;
                 radio3 = true;
 
+                polygonPoints3D.Clear();
+                polygonPoints.Clear();
+
                 particle = new Particle(canvas.ActualWidth, canvas.ActualHeight, true);
-                DrawCube(a, zoom);
+
+                DrawCube(a, zoom, true);
             }
 
             if (null == drawWorker) {
@@ -120,32 +122,17 @@ namespace BrownianMotion {
                 drawWorker.WorkerReportsProgress = true;
                 drawWorker.WorkerSupportsCancellation = true;
             }
-            if (!drawWorker.IsBusy) {
-                drawWorker.RunWorkerAsync();
-            }
 
-
-            btnStart.IsEnabled = false;
-            btnStop.IsEnabled = true;
-
-
+            drawWorker.RunWorkerAsync();
         }
 
         private void Stop_Click(object sender, RoutedEventArgs e) {
-
-            drawWorker.CancelAsync();
-            stop = true;
             btnStart.IsEnabled = true;
             btnStop.IsEnabled = false;
-
-            stop = true;
+            if ((null != drawWorker) && drawWorker.IsBusy) {
+                drawWorker.CancelAsync();
+            }
         }
-
-        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
-            steps = Convert.ToInt32(slider.Value) * 5;
-
-        }
-
 
     }
 }

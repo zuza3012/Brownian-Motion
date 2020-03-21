@@ -35,36 +35,26 @@ namespace BrownianMotion {
 
             return new Point3D(x, y, z);
         }
-        private void DrawPoint(Point3D point) {
-            //ParametersToTransform();
-            //canvas.Children.Clear();
-
+        private void DrawPoint(Point3D point, bool worker) {
             Point3D p = new Point3D();
             p.X = point.X;
             p.Y = point.Y;
             p.Z = point.Z;
-
-            if (point.X > ((double)a - 20 * zoom) || point.X < ((double)(-a) + 20 * zoom) || point.Y > ((double)a - 20 * zoom) || point.Y < ((double)(-a) + 20 * zoom) || point.Z > ((double)a - 20 * zoom) || point.Z < ((double)(-a) + 20 * zoom)) {
-                particle.p.X = tmpX;
-                particle.p.Y = tmpY;
-                particle.p.Z = tmpZ;
-                p.X = tmpX;
-                p.Y = tmpY;
-                p.Z = tmpZ;
-            }
+         
             // transformowane polozenie kulki 
             Point3D transformedPoint = Transform2D(p);
 
-            polygonPoints3D.Add(transformedPoint);
-            polygonPoints.Add(new Point(transformedPoint.X + offX, transformedPoint.Y + offY));
-
+            if (worker) {
+                polygonPoints3D.Add(transformedPoint);
+                polygonPoints.Add(new Point(transformedPoint.X + offX, transformedPoint.Y + offY));
+            }
+           
+            // to jakos trzeba usprawnic
             for (int j = 0; j < polygonPoints3D.Count; j++) {
                 Point3D tmp = Transform2D(polygonPoints3D[j]);
                 //Debug.WriteLine("linia 3d: " + (tmp.X + offX) + ", " + (tmp.Y + offY));
-                polygonPoints[j] = new Point(tmp.X + offX, tmp.Y + offY);
-                polygonPoints[j] = new Point(tmp.X + offX , tmp.Y + offY );
+                polygonPoints[j] = new Point(tmp.X + offX, tmp.Y + offY);             
                 //Debug.WriteLine("linia 2d: " + polygonPoints[j].X + ", " + polygonPoints[j].Y);
-
             }
 
             Ellipse ellipse = new Ellipse {
@@ -74,10 +64,7 @@ namespace BrownianMotion {
                 StrokeThickness = 2,
                 //Fill = Brushes.Black
             };
-            // Console.WriteLine("kula Left: " + (transformedPoint.X + offX - 10));
-            // Console.WriteLine("kula top: " + (transformedPoint.Y + offY - 10));
-            // Canvas.SetLeft(ellipse, (transformedPoint.X + offX - 10 ));
-            // Canvas.SetTop(ellipse, (transformedPoint.Y + offY - 10 ));
+
             int number = polygonPoints.Count - 1;
             Canvas.SetLeft(ellipse, (polygonPoints[number].X - 10));
             Canvas.SetTop(ellipse, (polygonPoints[number].Y - 10));
@@ -86,7 +73,7 @@ namespace BrownianMotion {
   
         }
 
-        private void DrawCube(int a, double zoom) {
+        private void DrawCube(int a, double zoom, bool worker) {
             ParametersToTransform();
             canvas.Children.Clear();
 
@@ -134,12 +121,9 @@ namespace BrownianMotion {
             DrawLine(edges2D[2], edges2D[6]);
             DrawLine(edges2D[3], edges2D[7]);
 
-            DrawPoint(particle.p);
+            DrawPoint(particle.p, worker);
+
             CreateAPolyline();
-
-
-
-
         }
 
         private void DrawLine(Point point1, Point point2) {
