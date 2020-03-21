@@ -18,19 +18,24 @@ namespace BrownianMotion {
                 p.X = 0;
                 p.Y = 0;
                 p.Z = 0;
-                d = 20;
+                d = 15;
             }
-            
-            
         }
-        public void MoveParticle(double width, double height, bool want3D, int a) {
+        public void MoveParticle(double width, double height, bool want3D, int a, int radius) {
             u1 = rand.Next(0, 100);
             u2 = rand.Next(0, 100);
+            double tmpX = 0, tmpY = 0, tmpZ = 0;
+
+            tmpX = p.X;
+            tmpY = p.Y;
+            if (want3D) {
+                tmpZ = p.Z;
+            }
 
             if (u1 >= 50) {
                 double tmp;
                 tmp = p.X + d;
-                p.X = tmp;
+                p.X = tmp;  
 
             } else {
                 double tmp;
@@ -60,6 +65,7 @@ namespace BrownianMotion {
                     tmp = p.Z - d;
                     p.Z = tmp;
                 }
+
             }
 
             if (!want3D) {
@@ -70,17 +76,22 @@ namespace BrownianMotion {
                 } else {
                 }
 
-
                 if (p.Y >= height) {
                     p.Y = p.Y - height;
                 } else if (p.Y < 0) {
                     p.Y = p.Y + height;
                 } else {
                 }
-            } 
+            }
+
+            if (want3D && (Math.Abs(p.X) > (double)(a - radius) || Math.Abs(p.Y) > (double)(a - radius) || Math.Abs(p.Z) > (double)(a - radius))) {
+                p.X = tmpX;
+                p.Y = tmpY;
+                p.Z = tmpZ;
+                return;
+            }
 
         }
-
 
     }
 }

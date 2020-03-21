@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:BrownianMotion"
         mc:Ignorable="d"
         Icon="molecules.ico"
-        Title="Brownian Motions" Height="768" Width="1024" ResizeMode="CanMinimize">
+        Title="Brownian Motions" Height="768" Width="1024" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Background="White">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="503*"/>
@@ -19,22 +19,12 @@
         </Menu>
         <Button x:Name="btnStart" Content="Start" HorizontalAlignment="Left" Margin="33,43,0,0" VerticalAlignment="Top" Width="75" Click="Start_Click"/>
         <Button x:Name="btnStop" Content="Stop" HorizontalAlignment="Left" Margin="133,43,0,0" VerticalAlignment="Top" Width="75" Click="Stop_Click"/>
-        <Slider x:Name="slider" HorizontalAlignment="Left" Margin="265,43,0,0" VerticalAlignment="Top" Height="19" Width="244" TickPlacement="BottomRight" Maximum="100" SmallChange="1" AutoToolTipPlacement="BottomRight" LargeChange="10" Grid.ColumnSpan="2" ValueChanged="Slider_ValueChanged" Background="{x:Null}" Minimum="1"/>
         <RadioButton x:Name="r2" Content="2D" Grid.Column="1" HorizontalAlignment="Left" Margin="83.8,43,0,0" VerticalAlignment="Top" IsChecked="True"/>
         <RadioButton x:Name="r3" Content="3D" Grid.Column="1" HorizontalAlignment="Left" Margin="144.8,43,0,0" VerticalAlignment="Top"/>
         <StackPanel Margin="0,75,0,0" Grid.ColumnSpan="2">
-            <Canvas x:Name="canvas" Height="664" Background="White" PreviewMouseDown="Canvas_PreviewMouseDown" PreviewMouseMove="Canvas_PreviewMouseMove" PreviewMouseUp="Canvas_PreviewMouseUp" PreviewMouseWheel="Canvas_PreviewMouseWheel" Margin="0,0,-0.4,0"   />
-
-            <!--<Border Height="553" Width="1003">
-                <Canvas  x:Name="canvas" HorizontalAlignment="Center" VerticalAlignment="Center"
-          Width="0" Height="0"
-          RenderTransform="1 0 0 -1 0 0">
-                    
-                </Canvas>
-            </Border>-->
-
-            <!-- Width="0" Height="0"
-          RenderTransform="1 0 0 -1 0 0"  RenderTransformOrigin="0.5,0.5" -->
+            <Canvas x:Name="canvas" Height="600" Background="White" PreviewMouseDown="Canvas_PreviewMouseDown" PreviewMouseMove="Canvas_PreviewMouseMove" PreviewMouseUp="Canvas_PreviewMouseUp" PreviewMouseWheel="Canvas_PreviewMouseWheel" Margin="0,0,-0.4,0"   >
+            </Canvas>
+            <ProgressBar x:Name="pgBar" Width="500" Height="15" VerticalAlignment="Center" Margin="0,20,0,0" Opacity="0.75"/>
         </StackPanel>
 
 
