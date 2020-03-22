@@ -7,6 +7,6 @@ Brownian motion is the random motion of particles suspended in a fluid (a liquid
 
 In physics the Wiener process is used to study Brownian motion, the diffusion of minute particles suspended in fluid, and other types of diffusion via the Fokker–Planck and Langevin equations. It also forms the basis for the rigorous path integral formulation of quantum mechanics and the study of eternal inflation in physical cosmology.
 
-Find out more about [Wiener process](https://en.wikipedia.org/wiki/Wiener_process) and [Brownian motion](https://en.wikipedia.org/wiki/Brownian_motion)
+Find out more about [Wiener process](https://en.wikipedia.org/wiki/Wiener_process) and [Brownian motion](https://en.wikipedia.org/wiki/Brownian_motion).
 
 
