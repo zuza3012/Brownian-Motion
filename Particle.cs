@@ -18,7 +18,7 @@ namespace BrownianMotion {
                 p.X = 0;
                 p.Y = 0;
                 p.Z = 0;
-                d = 15;
+                d = 10;
             }
         }
         public void MoveParticle(double width, double height, bool want3D, int a, int radius) {

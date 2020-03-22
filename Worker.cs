@@ -29,7 +29,7 @@ namespace BrownianMotion {
 
             hashset_points = new HashSet<Point3D>();
             if (radio2 == true) {
-                max = 90000;
+                max = 70000;
             }
             //var s2 = Stopwatch.StartNew();
             for (int nCounter = 1; nCounter <= max; ++nCounter) {

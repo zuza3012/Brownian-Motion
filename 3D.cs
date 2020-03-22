@@ -52,17 +52,15 @@ namespace BrownianMotion {
             // to jakos trzeba usprawnic
             for (int j = 0; j < polygonPoints3D.Count; j++) {
                 Point3D tmp = Transform2D(polygonPoints3D[j]);
-                //Debug.WriteLine("linia 3d: " + (tmp.X + offX) + ", " + (tmp.Y + offY));
                 polygonPoints[j] = new Point(tmp.X + offX, tmp.Y + offY);             
-                //Debug.WriteLine("linia 2d: " + polygonPoints[j].X + ", " + polygonPoints[j].Y);
             }
 
             Ellipse ellipse = new Ellipse {
                 Width = 20 * zoom,
                 Height = 20 * zoom,
-                Stroke = Brushes.Aqua,
+                Stroke = Brushes.Black,
                 StrokeThickness = 2,
-                //Fill = Brushes.Black
+                Fill = Brushes.Black
             };
 
             int number = polygonPoints.Count - 1;

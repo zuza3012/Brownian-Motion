@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
+using System.IO;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -17,10 +19,10 @@ namespace BrownianMotion {
         bool captured = false, radio2 = false, radio3 = false;
         int a = 200;
         private BackgroundWorker drawWorker = null;
-        double mx, my, azimuth = 0, elevation = 0, offX = 0, offY = 0, theta = 0, phi = 0, tmpX = 0, tmpY = 0, tmpZ = 0, zoom = 1;
-        private List<Point3D> edges3D = new List<Point3D>();
-        private PointCollection polygonPoints = new PointCollection();
-        private Point3DCollection polygonPoints3D = new Point3DCollection();
+        double mx, my, azimuth = 0, elevation = 0, offX = 0, offY = 0, theta = 0, phi = 0, zoom = 1, tmpX = 0, tmpY = 0, tmpZ = 0;
+        private List<Point3D> edges3D;
+        PointCollection polygonPoints;
+        Point3DCollection polygonPoints3D;
         private Point[] edges2D;
         float cosT = 0, sinT = 0, cosP = 0, sinP = 0, cosTcosP = 0, sinTsinP = 0, sinTcosP = 0, cosTsinP = 0;
         WriteableBitmap writeableBmp;
@@ -36,6 +38,21 @@ namespace BrownianMotion {
         }
 
         private void SaveGraph_Click(object sender, RoutedEventArgs e) {
+            Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
+            dialog.FileName = "Document"; 
+            dialog.DefaultExt = ".png";
+            dialog.Filter = "Image files (*.png) | *.png"; 
+
+            // Show save file dialog box
+            Nullable<bool> result = dialog.ShowDialog();
+
+            // Process save file dialog box results
+            if (result == true) {
+                string filename = dialog.FileName;
+                ControlToBmp(canvas, 96, 96).Save(dialog.FileName, System.Drawing.Imaging.ImageFormat.Png);
+            } else {
+                MessageBox.Show("File Save Error.");
+            }
         }
 
         private void Canvas_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e) {
@@ -97,17 +114,20 @@ namespace BrownianMotion {
 
             if (r2.IsChecked == true) {
                 writeableBmp = BitmapFactory.New(1010, 600);
-                writeableBmp.Clear(Colors.White);
+               // writeableBmp.Clear(Colors.White);
 
                 radio3 = false;
                 radio2 = true;
                 particle = new Particle(canvas.ActualWidth, canvas.ActualHeight, false);
             } else {
+                edges3D = new List<Point3D>();
                 radio2 = false;
                 radio3 = true;
-
-                polygonPoints3D.Clear();
-                polygonPoints.Clear();
+                polygonPoints = new PointCollection();
+                polygonPoints3D = new Point3DCollection();
+              
+                // polygonPoints3D.Clear();
+                //polygonPoints.Clear();
 
                 particle = new Particle(canvas.ActualWidth, canvas.ActualHeight, true);
 
@@ -127,11 +147,37 @@ namespace BrownianMotion {
         }
 
         private void Stop_Click(object sender, RoutedEventArgs e) {
+            saveItem.IsEnabled = true;
             btnStart.IsEnabled = true;
             btnStop.IsEnabled = false;
             if ((null != drawWorker) && drawWorker.IsBusy) {
                 drawWorker.CancelAsync();
+            }           
+        }   
+
+        public static Bitmap ControlToBmp(Visual target, double dpiX, double dpiY) {
+            if (target == null) {
+                return null;
             }
+            // render control content
+            Rect bounds = VisualTreeHelper.GetDescendantBounds(target);
+            RenderTargetBitmap rtb = new RenderTargetBitmap((int)(bounds.Width * dpiX / 96.0),
+                                                            (int)(bounds.Height * dpiY / 96.0),
+                                                            dpiX,
+                                                            dpiY,
+                                                            PixelFormats.Pbgra32);
+            DrawingVisual dv = new DrawingVisual();
+            using (DrawingContext ctx = dv.RenderOpen()) {
+                VisualBrush vb = new VisualBrush(target);
+                ctx.DrawRectangle(vb, null, new Rect(new System.Windows.Point(), bounds.Size));
+            }
+            rtb.Render(dv);
+
+            MemoryStream stream = new MemoryStream();
+            BitmapEncoder encoder = new BmpBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(rtb));
+            encoder.Save(stream);
+            return new Bitmap(stream);
         }
 
     }
